@@ -4,6 +4,8 @@ import com.codegym.model.Account;
 import com.codegym.repository.IAccountRepository;
 import com.codegym.service.IAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +15,7 @@ public class AccountService implements IAccountService {
     @Autowired
     private IAccountRepository iAccountRepository;
 
+
     @Override
     public List<Account> findAll() {
         return iAccountRepository.findAll();
@@ -20,6 +23,8 @@ public class AccountService implements IAccountService {
 
     @Override
     public void save(Account account) {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        account.setPassword(passwordEncoder.encode(account.getPassword()));
         iAccountRepository.save(account);
     }
 

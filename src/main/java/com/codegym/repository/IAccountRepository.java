@@ -15,4 +15,6 @@ public interface IAccountRepository extends JpaRepository<Account, Integer> {
             "`status` = :#{#account.status}, " +
             "`username` = :#{#account.username} WHERE (`id` = :#{#account.id});", nativeQuery = true)
     void update(Account account);
+
+    Account findByUsername(String username);
 }
