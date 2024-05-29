@@ -2,6 +2,7 @@ package com.codegym.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -19,6 +20,7 @@ public class ExportCote {
     private String partner;
     private double weight;
     private int amount;
+    @CreationTimestamp
     private LocalDateTime dateExport;
     private double price;
 
@@ -29,6 +31,5 @@ public class ExportCote {
     @ManyToOne
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Account account;
-
 
 }
