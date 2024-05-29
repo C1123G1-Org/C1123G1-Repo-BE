@@ -2,13 +2,15 @@ package com.codegym.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +24,7 @@ public class Account {
     private String email;
     private boolean gender;
     @Column(unique = true)
-    private String cmnd;
+    private String identityCode;
     private boolean status;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -34,7 +36,5 @@ public class Account {
     @JsonIgnore
     private List<Role> roles;
 
-    public Account() {
-    }
 
 }

@@ -1,29 +1,29 @@
 package com.codegym.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Cote {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(unique = true)
     private String code;
-    private Date dateOpen;
-    private Date dateClose;
+    private LocalDate dateOpen;
+    private LocalDate dateClose;
     private int quantity;
 
     @ManyToOne
-//    @JoinColumn(name = "account_id", referencedColumnName = "id")
+    @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Account account;
 
-    public Cote() {
-    }
 
 }

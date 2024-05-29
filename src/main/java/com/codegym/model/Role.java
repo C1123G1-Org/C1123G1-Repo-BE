@@ -1,15 +1,16 @@
 package com.codegym.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Set;
 
 
 @Entity
-@Setter
-@Getter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,7 +20,5 @@ public class Role {
     @ManyToMany(mappedBy = "roles")
     private Set<Account> accounts;
 
-    public Role() {
-    }
 
 }
