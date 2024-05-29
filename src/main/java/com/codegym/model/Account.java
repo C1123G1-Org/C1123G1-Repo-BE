@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Data
@@ -35,7 +34,7 @@ public class Account {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     @JsonIgnore
-    private Set<Role> roles;
+    private List<Role> roles;
 
 
 }
