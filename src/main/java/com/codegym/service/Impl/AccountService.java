@@ -29,7 +29,7 @@ public class AccountService implements IAccountService {
 
     @Override
     public void updateS(Account account) {
-        iAccountRepository.update(account);
+        iAccountRepository.save(account);
     }
 
     @Override
