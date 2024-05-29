@@ -2,6 +2,8 @@ package com.codegym.repository;
 
 import com.codegym.model.Account;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -15,4 +17,8 @@ public interface IAccountRepository extends JpaRepository<Account, Integer> {
             "`status` = :#{#account.status}, " +
             "`username` = :#{#account.username} WHERE (`id` = :#{#account.id});", nativeQuery = true)
     void update(Account account);
+
+
+    @Query(value = " select * from account ", nativeQuery = true)
+    Page<Account> findAllPage(Pageable pageable);
 }
