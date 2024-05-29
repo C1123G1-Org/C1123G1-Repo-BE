@@ -1,29 +1,30 @@
 package com.codegym.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
 import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String title;
-    @Column(columnDefinition = "LONGBLOB")
+    @Column(columnDefinition = "Text")
     private String content;
     private String image;
     private String status;
-    private Date postDate;
+    private LocalDate postDate;
 
     @ManyToOne
-//    @JoinColumn(name = "account_id", referencedColumnName = "id")
+    @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Account account;
 
-    public Post() {
-    }
 
 }

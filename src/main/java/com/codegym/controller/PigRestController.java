@@ -1,4 +1,4 @@
 package com.codegym.controller;
 
-public class Home {
+public class PigRestController {
 }
