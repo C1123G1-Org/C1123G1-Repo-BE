@@ -19,5 +19,4 @@ public interface ICoteService {
     Page<Cote> findByAccount_Code(Pageable pageable,String code);
     Page<Cote> findByDateOpenBetween (Pageable pageable, LocalDate startDate, LocalDate endDate);
     Page<Cote> findByDateCloseBetween (Pageable pageable, LocalDate startDate, LocalDate endDate);
-//    void addPigToCote(int idCote, int idPig);
 }
