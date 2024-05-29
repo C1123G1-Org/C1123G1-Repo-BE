@@ -1,6 +1,8 @@
 package com.codegym.service;
 
+import com.codegym.dto.StaffDto;
 import com.codegym.model.Account;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -16,4 +18,5 @@ public interface IAccountService {
 
     void delete(Account account);
 
+    Page<Account> getAllPage(StaffDto staffDto);
 }

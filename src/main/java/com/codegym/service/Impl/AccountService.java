@@ -1,9 +1,13 @@
 package com.codegym.service.Impl;
 
+import com.codegym.dto.StaffDto;
 import com.codegym.model.Account;
 import com.codegym.repository.IAccountRepository;
 import com.codegym.service.IAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,6 +40,16 @@ public class AccountService implements IAccountService {
     @Override
     public void delete(Account account) {
         iAccountRepository.delete(account);
+    }
+
+    @Override
+    public Page<Account> getAllPage(StaffDto staffDto) {
+        Pageable pageable = PageRequest.of(staffDto.getPage(), staffDto.getSize(), staffDto.getSortDirection(),
+                staffDto.getSortBy());
+        Page<Account> accounts = this.iAccountRepository.findAllPage(pageable);
+
+        return accounts;
+
     }
 
 
