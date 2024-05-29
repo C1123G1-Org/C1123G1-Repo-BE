@@ -4,6 +4,8 @@ import com.codegym.model.Cote;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,9 +16,8 @@ public interface ICoteService {
     void update(Cote cote);
     void remove(int id);
     Optional<Cote> findById(int id);
-//    List<Cote> findCotesByNameCote(String name);
-//    Optional<List<Cote>> findCotesByNameCoteContaining(String keyword);
-//    Optional<Cote> findCoteByNameCoteContaining(String keyword);
-//    List<Cote> findCotesByTypeCoteContaining(String type);
-//    List<Cote> findCotesByProducer(String producer);
+    Page<Cote> findByAccount_Code(Pageable pageable,String code);
+    Page<Cote> findByDateOpenBetween (Pageable pageable, LocalDate startDate, LocalDate endDate);
+    Page<Cote> findByDateCloseBetween (Pageable pageable, LocalDate startDate, LocalDate endDate);
+//    void addPigToCote(int idCote, int idPig);
 }
