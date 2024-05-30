@@ -1,4 +1,20 @@
 package com.codegym.service;
 
+import com.codegym.dto.PostDTO;
+import com.codegym.model.Post;
+import org.springframework.http.ResponseEntity;
+
+import java.util.List;
+
 public interface IPostService {
+    ResponseEntity<List<Post>> getAllPost();
+
+    ResponseEntity<Post> getPostById(int id);
+
+    ResponseEntity<Post> save(PostDTO newPost);
+
+    ResponseEntity<Post> remove(int id);
+
+    ResponseEntity<Post> update(int id,
+                                PostDTO updatePost);
 }
