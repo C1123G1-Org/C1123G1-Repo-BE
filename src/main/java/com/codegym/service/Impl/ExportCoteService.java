@@ -10,6 +10,7 @@ import com.codegym.repository.IExportCoteRepository;
 import com.codegym.service.IExportCoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +41,7 @@ public class ExportCoteService implements IExportCoteService {
         }
         return exportCotes;
     }
+
 
     @Override
     public ExportCote addExportCote(ExportCoteRequest exportCoteRequest) {
@@ -81,6 +83,8 @@ public class ExportCoteService implements IExportCoteService {
     public void deleteExportCote(int id) {
         iExportCoteRepository.deleteById(id);
     }
+
+
 
 
 }
