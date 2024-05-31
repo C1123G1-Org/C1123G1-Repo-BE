@@ -38,7 +38,7 @@ public class ExportCoteService implements IExportCoteService {
             exportCotes.getContent().get(i).setAccount(account);
             exportCotes.getContent().get(i).getCote().setAccount(account);
         }
-        return iExportCoteRepository.findAll(pageable);
+        return exportCotes;
     }
 
     @Override
