@@ -19,4 +19,10 @@ public interface IAccountService {
     void delete(Account account);
 
     Page<Account> getAllPage(StaffDto staffDto);
+
+    List<Account> getAllName(String name);
+
+
+//    Page<Account> findByName(String name);
+
 }

@@ -52,5 +52,12 @@ public class AccountService implements IAccountService {
 
     }
 
+    @Override
+    public List<Account> getAllName(String name) {
+        return iAccountRepository.findByName(name);
+    }
+
+
+
 
 }

@@ -12,4 +12,5 @@ public class StaffDto {
     private String sortBy;
 
     private Sort.Direction sortDirection;
+    private String name;
 }
