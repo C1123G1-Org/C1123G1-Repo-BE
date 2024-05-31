@@ -1,6 +1,7 @@
 package com.codegym.service.Impl;
 
 import com.codegym.dto.ExportCoteRequest;
+import com.codegym.model.Account;
 import com.codegym.model.Cote;
 import com.codegym.model.ExportCote;
 import com.codegym.repository.IAccountRepository;
@@ -29,6 +30,14 @@ public class ExportCoteService implements IExportCoteService {
 
     @Override
     public Page<ExportCote> findAll(Pageable pageable) {
+        Page<ExportCote> exportCotes = iExportCoteRepository.findAll(pageable);
+        for(int i = 0 ; i < exportCotes.getContent().size(); i++){
+            Account account = new Account();
+            account.setId(exportCotes.getContent().get(i).getAccount().getId());
+            account.setFullName(exportCotes.getContent().get(i).getAccount().getFullName());
+            exportCotes.getContent().get(i).setAccount(account);
+            exportCotes.getContent().get(i).getCote().setAccount(account);
+        }
         return iExportCoteRepository.findAll(pageable);
     }
 
