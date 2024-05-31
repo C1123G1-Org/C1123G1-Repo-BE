@@ -6,6 +6,7 @@ import com.codegym.model.Cote;
 import com.codegym.model.Pig;
 import com.codegym.service.ICoteService;
 import com.codegym.service.IPigService;
+import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,13 +23,13 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin("*")
+@CrossOrigin("http://localhost:3000")
 @RequestMapping("/api/pigs")
 public class PigRestController {
     @Autowired
-    IPigService pigService;
+    private IPigService pigService;
     @Autowired
-    ICoteService coteService;
+    private ICoteService coteService;
 
     @GetMapping
     public ResponseEntity<List<Pig>> listPigs(){
@@ -66,10 +67,7 @@ public class PigRestController {
     }
 
     @PostMapping
-    public ResponseEntity<PigDto> createPig(@Validated @RequestBody PigDto pigDto, BindingResult bindingResult){
-        if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
-        }
+    public ResponseEntity<PigDto> createPig(@Valid @RequestBody PigDto pigDto){
         Pig addPig = new Pig();
         BeanUtils.copyProperties(pigDto, addPig);
         Cote cote = pigDto.getRoom();
@@ -89,7 +87,7 @@ public class PigRestController {
 //    }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Pig> deletePig(@PathVariable int id){
+    public ResponseEntity<Pig> deletePig(@PathVariable Integer id){
         Optional<Pig> PigOptional = pigService.findById(id);
         if (!PigOptional.isPresent()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -104,7 +102,7 @@ public class PigRestController {
         return new ResponseEntity<>(PigOptional.get(),HttpStatus.NO_CONTENT);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<Pig> updatePig(@PathVariable int id, @RequestBody PigDto pigDto){
+    public ResponseEntity<Pig> updatePig(@Valid @PathVariable Integer id, @RequestBody PigDto pigDto){
         Optional<Pig> PigOptional = pigService.findById(id);
         if (!PigOptional.isPresent()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

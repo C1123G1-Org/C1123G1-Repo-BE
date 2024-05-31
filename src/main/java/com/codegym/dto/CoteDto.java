@@ -21,10 +21,10 @@ public class CoteDto {
     @NotNull
     @NotEmpty
     private String code;
-    @NotNull
+    @NotNull(message = "không được để trống")
     private LocalDate dateOpen;
     private LocalDate dateClose;
-    @Min(0)
+    @Min(value = 0,message = "Thấp nhất là 0")
     @Max(15)
     private int quantity;
     @NotNull
