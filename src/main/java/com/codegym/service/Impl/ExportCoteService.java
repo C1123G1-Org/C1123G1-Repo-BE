@@ -39,7 +39,9 @@ public class ExportCoteService implements IExportCoteService {
             throw new RuntimeException();
         }
         cote.setQuantity(cote.getQuantity() - exportCoteRequest.getAmount());
-        cote.setDateClose(LocalDate.now());
+        if(cote.getQuantity() != 0) {
+            cote.setDateClose(LocalDate.now());
+        }
         ExportCote exportCote = new ExportCote();
         exportCote.setWeight(exportCoteRequest.getWeight());
         exportCote.setAmount(exportCoteRequest.getAmount());
