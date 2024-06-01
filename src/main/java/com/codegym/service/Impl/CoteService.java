@@ -63,11 +63,4 @@ public class CoteService implements ICoteService {
     public Page<Cote> findByDateCloseBetween(Pageable pageable, LocalDate startDate, LocalDate endDate) {
         return coteRepository.findByDateCloseBetween(pageable,startDate,endDate);
     }
-
-//    @Override
-//    public void addPigToCote(int idCote, int idPig) {
-//        Cote addToCote
-//    }
-
-
 }
