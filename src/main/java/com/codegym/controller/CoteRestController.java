@@ -9,7 +9,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,8 +40,9 @@ public class CoteRestController {
 //        return new ResponseEntity<>(list,HttpStatus.OK);
 //    }
 
-    @GetMapping()
-    public ResponseEntity<Page<Cote>> listCotesPage(@PageableDefault(value = 3) Pageable pageable){
+    @GetMapping("/{pageSize}")
+    public ResponseEntity<Page<Cote>> listCotesPage(@PathVariable Integer pageSize,@RequestParam(value = "page") Integer page){
+        Pageable pageable = PageRequest.of(page,pageSize, Sort.by("dateOpen").descending());
         Page<Cote> list = coteService.findAll(pageable);
         if (list.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -79,7 +82,7 @@ public class CoteRestController {
         return new ResponseEntity<>(list,HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/find/{id}")
     public ResponseEntity<Cote> findCote(@PathVariable Integer id){
         Optional<Cote> coteOptional = coteService.findById(id);
         if (!coteOptional.isPresent()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
