@@ -11,17 +11,23 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/posts")
+@CrossOrigin("*")
 public class PostRestController {
     @Autowired
     IPostService postService;
 
-    @GetMapping("/newests")
+    @GetMapping("/all")
     public ResponseEntity<List<Post>> getAllPost() {
         return postService.getAllPost();
     }
 
+    @GetMapping("/list-post/{page}")
+    public ResponseEntity<List<Post>> getPostWithPagination(@PathVariable Integer page) {
+        return postService.getPostWithPagination(page);
+    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<Post> getPostById(@PathVariable int id) {
+    public ResponseEntity<Post> getPostById(@PathVariable Integer id) {
         return postService.getPostById(id);
     }
 
