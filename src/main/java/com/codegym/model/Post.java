@@ -17,9 +17,9 @@ import java.time.LocalDateTime;
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private String title;
-    @Column(columnDefinition = "Text")
+    @Column(columnDefinition = "TEXT")
     private String content;
     private String image;
     private String status;
