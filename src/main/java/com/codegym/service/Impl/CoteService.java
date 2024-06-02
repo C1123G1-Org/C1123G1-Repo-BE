@@ -50,20 +50,27 @@ public class CoteService implements ICoteService {
     }
 
     @Override
-    public Page<Cote> findByAccount_Code(Pageable pageable, String code) {
-        return coteRepository.findByAccount_Code(pageable,code);
+    public Optional<List<Cote>> findByAccount_Code(String code) {
+        return coteRepository.findByAccount_Code(code);
     }
 
     @Override
-    public Page<Cote> findByDateOpenBetween(Pageable pageable, LocalDate startDate, LocalDate endDate) {
-        return coteRepository.findByDateOpenBetween(pageable,startDate,endDate);
+    public Optional<List<Cote>> findByDateOpenBetween(LocalDate startDate, LocalDate endDate) {
+        return coteRepository.findByDateOpenBetween(startDate,endDate);
     }
 
     @Override
-    public Page<Cote> findByDateCloseBetween(Pageable pageable, LocalDate startDate, LocalDate endDate) {
-        return coteRepository.findByDateCloseBetween(pageable,startDate,endDate);
+    public Optional<List<Cote>> findByDateCloseBetween(LocalDate startDate, LocalDate endDate) {
+        return coteRepository.findByDateCloseBetween(startDate,endDate);
     }
 
+    @Override
+    public Optional<List<Cote>> findByDateCloseBetweenAndAccount_Code(LocalDate startDate, LocalDate endDate, String code) {
+        return coteRepository.findByDateCloseBetweenAndAccount_Code(startDate,endDate,code);
+    }
 
-
+    @Override
+    public Optional<List<Cote>> findByDateOpenBetweenAndAccount_Code(LocalDate startDate, LocalDate endDate, String code) {
+        return coteRepository.findByDateOpenBetweenAndAccount_Code(startDate,endDate,code);
+    }
 }

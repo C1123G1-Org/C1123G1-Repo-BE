@@ -51,35 +51,54 @@ public class CoteRestController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Page<Cote>> searchCodeAccount(@PageableDefault(value = 3) Pageable pageable,
-                                                        @RequestParam("code") String code){
-        Page<Cote> list = coteService.findByAccount_Code(pageable,code);
-        if (list.isEmpty()){
+    public ResponseEntity<List<Cote>> searchCodeAccount(@RequestParam("code") String code){
+        Optional<List<Cote>> coteOptional = coteService.findByAccount_Code(code);
+        if (!coteOptional.isPresent()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(list,HttpStatus.OK);
+        return new ResponseEntity<>(coteOptional.get(),HttpStatus.OK);
     }
 
     @GetMapping("/search/open")
-    public ResponseEntity<Page<Cote>> searchOpenTime(@PageableDefault(value = 3) Pageable pageable,
-                                                     @RequestParam("startDate")LocalDate startDate,
+    public ResponseEntity<List<Cote>> searchOpenTime(@RequestParam("startDate")LocalDate startDate,
                                                      @RequestParam("endDate")LocalDate endDate){
-        Page<Cote> list = coteService.findByDateOpenBetween(pageable,startDate,endDate);
-        if (list.isEmpty()){
+        Optional<List<Cote>> listOptional = coteService.findByDateOpenBetween(startDate,endDate);
+        if (!listOptional.isPresent()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(list,HttpStatus.OK);
+        return new ResponseEntity<>(listOptional.get(),HttpStatus.OK);
+    }
+
+    @GetMapping("/search/open/account")
+    public ResponseEntity<List<Cote>> searchOpenTimeAndAccount(@RequestParam("startDate")LocalDate startDate,
+                                                                @RequestParam("endDate")LocalDate endDate,
+                                                               @RequestParam("code") String code){
+        Optional<List<Cote>> listOptional = coteService.findByDateOpenBetweenAndAccount_Code(startDate,endDate,code);
+        if (!listOptional.isPresent()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(listOptional.get(),HttpStatus.OK);
     }
 
     @GetMapping("/search/close")
-    public ResponseEntity<Page<Cote>> searchCloseTime(@PageableDefault(value = 3) Pageable pageable,
-                                                      @RequestParam("startDate")LocalDate startDate,
+    public ResponseEntity<List<Cote>> searchCloseTime(@RequestParam("startDate")LocalDate startDate,
                                                       @RequestParam("endDate")LocalDate endDate){
-        Page<Cote> list = coteService.findByDateCloseBetween(pageable,startDate,endDate);
-        if (list.isEmpty()){
+        Optional<List<Cote>> listOptional = coteService.findByDateCloseBetween(startDate,endDate);
+        if (!listOptional.isPresent()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(list,HttpStatus.OK);
+        return new ResponseEntity<>(listOptional.get(),HttpStatus.OK);
+    }
+
+    @GetMapping("/search/close/account")
+    public ResponseEntity<List<Cote>> searchCloseTimeAndAccount(@RequestParam("startDate")LocalDate startDate,
+                                                               @RequestParam("endDate")LocalDate endDate,
+                                                               @RequestParam("code") String code){
+        Optional<List<Cote>> listOptional = coteService.findByDateCloseBetweenAndAccount_Code(startDate,endDate,code);
+        if (!listOptional.isPresent()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(listOptional.get(),HttpStatus.OK);
     }
 
     @GetMapping("/find/{id}")

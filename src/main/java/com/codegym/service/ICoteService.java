@@ -16,7 +16,12 @@ public interface ICoteService {
     void update(Cote cote);
     void remove(int id);
     Optional<Cote> findById(int id);
-    Page<Cote> findByAccount_Code(Pageable pageable,String code);
-    Page<Cote> findByDateOpenBetween (Pageable pageable, LocalDate startDate, LocalDate endDate);
-    Page<Cote> findByDateCloseBetween (Pageable pageable, LocalDate startDate, LocalDate endDate);
+//    Page<Cote> findByAccount_Code(Pageable pageable,String code);
+//    Page<Cote> findByDateOpenBetween (Pageable pageable, LocalDate startDate, LocalDate endDate);
+//    Page<Cote> findByDateCloseBetween (Pageable pageable, LocalDate startDate, LocalDate endDate);
+    Optional<List<Cote>> findByAccount_Code(String code);
+    Optional<List<Cote>> findByDateOpenBetween ( LocalDate startDate, LocalDate endDate);
+    Optional<List<Cote>> findByDateCloseBetween ( LocalDate startDate, LocalDate endDate);
+    Optional<List<Cote>> findByDateCloseBetweenAndAccount_Code ( LocalDate startDate, LocalDate endDate, String code);
+    Optional<List<Cote>> findByDateOpenBetweenAndAccount_Code ( LocalDate startDate, LocalDate endDate, String code);
 }
