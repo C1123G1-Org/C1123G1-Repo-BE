@@ -63,7 +63,6 @@ public class CoteService implements ICoteService {
     public Optional<List<Cote>> findByDateCloseBetween(LocalDate startDate, LocalDate endDate) {
         return coteRepository.findByDateCloseBetween(startDate,endDate);
     }
-
     @Override
     public Optional<List<Cote>> findByDateCloseBetweenAndAccount_Code(LocalDate startDate, LocalDate endDate, String code) {
         return coteRepository.findByDateCloseBetweenAndAccount_Code(startDate,endDate,code);

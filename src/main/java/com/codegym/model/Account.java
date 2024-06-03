@@ -22,7 +22,7 @@ public class Account {
     private String password;
     private String fullName;
     private String email;
-    private boolean gender;
+    private Boolean gender;
     @Column(unique = true)
     private String identityCode;
     private boolean status;
