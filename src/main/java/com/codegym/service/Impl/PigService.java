@@ -47,42 +47,27 @@ public class PigService implements IPigService {
     }
 
     @Override
-    public Optional<List<Pig>> findPigsByStatus(String status) {
-        return pigRepository.findPigsByStatus(status);
+    public Page<Pig> findPigsByStatus(Pageable pageable, String status) {
+        return pigRepository.findPigsByStatus(pageable, status);
     }
 
-    @Override
-    public List<Pig> findPigsByWeight(double weight) {
-        return pigRepository.findPigsByWeight(weight);
-    }
-
-    @Override
-    public Optional<List<Pig>> findPigsByWeightIsAfterAndWeightIsBefore(float weightMin, float weightMax) {
-        return pigRepository.findPigsByWeightIsAfterAndWeightIsBefore(weightMin, weightMax);
-    }
-
-    @Override
-    public Optional<List<Pig>> findPigsByWeightIsAfter(float weightMin) {
-        return pigRepository.findPigsByWeightIsAfter(weightMin);
-    }
-
-    @Override
-    public Optional<List<Pig>> findPigsByWeightIsBefore(float weightMax) {
-        return pigRepository.findPigsByWeightIsBefore(weightMax);
-    }
-
-    @Override
-    public Optional<List<Pig>> findPigsByRoom(Cote room) {
-        return pigRepository.findPigsByRoom(room);
-    }
-
-    @Override
-    public Optional<List<Pig>> findPigsByStatusContaining(String status) {
-        return pigRepository.findPigsByStatusContaining(status);
-    }
-
-    @Override
-    public Optional<List<Pig>> findPigsByWeightBetween(double weightMin, double weightMax) {
-        return pigRepository.findPigsByWeightBetween(weightMin, weightMax);
-    }
+//    @Override
+//    public List<Pig> findPigsByWeight(double weight) {
+//        return pigRepository.findPigsByWeight(weight);
+//    }
+//
+//    @Override
+//    public Optional<List<Pig>> findPigsByRoom(Cote room) {
+//        return pigRepository.findPigsByRoom(room);
+//    }
+//
+//    @Override
+//    public Optional<List<Pig>> findPigsByStatusContaining(String status) {
+//        return pigRepository.findPigsByStatusContaining(status);
+//    }
+//
+//    @Override
+//    public Optional<List<Pig>> findPigsByWeightBetween(double weightMin, double weightMax) {
+//        return pigRepository.findPigsByWeightBetween(weightMin, weightMax);
+//    }
 }
