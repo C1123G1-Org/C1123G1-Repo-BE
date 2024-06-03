@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +30,7 @@ public class CoteService implements ICoteService {
     }
 
     @Override
-    public void save(Cote cote) {
+    public void save(Cote cote){
         coteRepository.save(cote);
     }
 
@@ -45,5 +47,29 @@ public class CoteService implements ICoteService {
     @Override
     public Optional<Cote> findById(int id) {
         return coteRepository.findById(id);
+    }
+
+    @Override
+    public Optional<List<Cote>> findByAccount_Code(String code) {
+        return coteRepository.findByAccount_Code(code);
+    }
+
+    @Override
+    public Optional<List<Cote>> findByDateOpenBetween(LocalDate startDate, LocalDate endDate) {
+        return coteRepository.findByDateOpenBetween(startDate,endDate);
+    }
+
+    @Override
+    public Optional<List<Cote>> findByDateCloseBetween(LocalDate startDate, LocalDate endDate) {
+        return coteRepository.findByDateCloseBetween(startDate,endDate);
+    }
+    @Override
+    public Optional<List<Cote>> findByDateCloseBetweenAndAccount_Code(LocalDate startDate, LocalDate endDate, String code) {
+        return coteRepository.findByDateCloseBetweenAndAccount_Code(startDate,endDate,code);
+    }
+
+    @Override
+    public Optional<List<Cote>> findByDateOpenBetweenAndAccount_Code(LocalDate startDate, LocalDate endDate, String code) {
+        return coteRepository.findByDateOpenBetweenAndAccount_Code(startDate,endDate,code);
     }
 }
