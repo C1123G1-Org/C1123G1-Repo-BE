@@ -9,6 +9,8 @@ import java.util.List;
 public interface IPostService {
     ResponseEntity<List<Post>> getAllPost();
 
+    ResponseEntity<List<Post>> getPostWithPagination(int page);
+
     ResponseEntity<Post> getPostById(int id);
 
     ResponseEntity<Post> save(PostDTO newPost);
