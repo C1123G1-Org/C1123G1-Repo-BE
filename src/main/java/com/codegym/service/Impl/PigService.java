@@ -85,4 +85,9 @@ public class PigService implements IPigService {
     public Optional<List<Pig>> findPigsByWeightBetween(double weightMin, double weightMax) {
         return pigRepository.findPigsByWeightBetween(weightMin, weightMax);
     }
+
+    @Override
+    public Optional<List<Pig>> findPigsByCote_Code(String code) {
+        return pigRepository.findPigsByCote_Code(code);
+    }
 }

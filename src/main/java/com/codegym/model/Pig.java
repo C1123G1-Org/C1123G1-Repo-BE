@@ -22,6 +22,6 @@ public class Pig {
 
     @ManyToOne
     @JoinColumn(name = "cote_id", referencedColumnName = "id")
-    private Cote room;
+    private Cote cote;
 
 }

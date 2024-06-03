@@ -17,4 +17,5 @@ public interface IPigRepository extends JpaRepository<Pig, Integer> {
     Optional<List<Pig>> findPigsByWeightIsBefore (float weightMax);
     Optional<List<Pig>> findPigsByRoom(Cote room);
     Optional<List<Pig>> findPigsByWeightBetween(double weightMin, double weightMax);
+    Optional<List<Pig>> findPigsByCote_Code(String code);
 }
