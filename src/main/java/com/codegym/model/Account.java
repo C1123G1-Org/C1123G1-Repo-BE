@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -14,7 +15,7 @@ import java.util.List;
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     @Column(unique = true)
     private String code;
     @Column(unique = true)
@@ -25,7 +26,7 @@ public class Account {
     private Boolean gender;
     @Column(unique = true)
     private String identityCode;
-    private boolean status;
+    private LocalDate date;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
