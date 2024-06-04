@@ -1,16 +1,28 @@
 package com.codegym.dto;
 
-import lombok.Data;
+import jakarta.persistence.Column;
+import lombok.*;
 import org.springframework.data.domain.Sort;
 
-@Data
-public class StaffDto {
-    private  Integer page;
+import java.time.LocalDate;
 
-    private Integer size;
 
-    private String sortBy;
+public interface StaffDto {
+    int getId();
 
-    private Sort.Direction sortDirection;
-    private String name;
+    String getCode();
+
+    String getUsername();
+
+    String getPassword();
+
+    String getFullName();
+
+    String getEmail();
+
+    Boolean getGender();
+
+    String getIdentityCode();
+
+    LocalDate getDate();
 }
