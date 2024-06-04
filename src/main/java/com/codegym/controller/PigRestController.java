@@ -98,7 +98,7 @@ public class PigRestController {
         if (!PigOptional.isPresent()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        Cote coteOld = PigOptional.get().getRoom();
+        Cote coteOld = PigOptional.get().getCote();
         coteOld.setQuantity(coteOld.getQuantity()-1);
         if (coteOld.getQuantity() == 0) {
             coteOld.setDateClose(LocalDate.now());
@@ -113,7 +113,7 @@ public class PigRestController {
         if (!PigOptional.isPresent()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        Cote coteOld = PigOptional.get().getRoom();
+        Cote coteOld = PigOptional.get().getCote();
         coteOld.setQuantity(coteOld.getQuantity()-1);
         if (coteOld.getQuantity() == 0) {
             coteOld.setDateClose(LocalDate.now());
@@ -128,4 +128,6 @@ public class PigRestController {
         pigService.update(id, updatePig);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+
 }

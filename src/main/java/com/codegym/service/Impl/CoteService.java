@@ -72,4 +72,9 @@ public class CoteService implements ICoteService {
     public Optional<List<Cote>> findByDateOpenBetweenAndAccount_Code(LocalDate startDate, LocalDate endDate, String code) {
         return coteRepository.findByDateOpenBetweenAndAccount_Code(startDate,endDate,code);
     }
+
+    @Override
+    public List<Cote> findCotesByDateCloseIsNull() {
+        return coteRepository.findCotesByDateCloseIsNull();
+    }
 }
