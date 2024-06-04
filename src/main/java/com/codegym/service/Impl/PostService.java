@@ -6,6 +6,9 @@ import com.codegym.repository.IPostRepository;
 import com.codegym.service.IPostService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -25,6 +28,19 @@ public class PostService implements IPostService {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(posts,
+                HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<List<Post>> getPostWithPagination(int page) {
+        Pageable pageable = PageRequest.of(page,
+                5);
+        Page<Post> postList = postRepository.findAll(pageable);
+
+        if (postList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(postList.getContent(),
                 HttpStatus.OK);
     }
 

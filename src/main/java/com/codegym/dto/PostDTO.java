@@ -12,11 +12,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class PostDTO {
-    private int id;
+    private Integer id;
     private String title;
     private String content;
     private String image;
     private String status = "POSTED";
     private LocalDateTime postDate;
-    private int accountId;
+    private Integer accountId;
 }
