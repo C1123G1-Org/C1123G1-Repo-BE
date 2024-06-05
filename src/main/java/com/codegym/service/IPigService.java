@@ -13,18 +13,13 @@ public interface IPigService {
     List<Pig> findAll();
     Page<Pig> findAll(Pageable pageable);
     void save(Pig pig);
-
     void update(int id,Pig pig);
     void remove(int id);
     Optional<Pig> findById(int id);
-    Optional<List<Pig>> findPigsByStatus(String status);
-    List<Pig> findPigsByWeight(double weight);
-
-    Optional<List<Pig>> findPigsByWeightIsAfterAndWeightIsBefore (float weightMin, float weightMax);
-    Optional<List<Pig>> findPigsByWeightIsAfter(float weightMin);
-    Optional<List<Pig>> findPigsByWeightIsBefore (float weightMax);
-    Optional<List<Pig>> findPigsByRoom(Cote room);
-    Optional<List<Pig>> findPigsByStatusContaining(String status);
-    Optional<List<Pig>> findPigsByWeightBetween(double weightMin, double weightMax);
-
+    Page<Pig> findPigsByStatus(Pageable pageable, String status);
+//    List<Pig> findPigsByWeight(double weight);
+//    Optional<List<Pig>> findPigsByRoom(Cote room);
+//    Optional<List<Pig>> findPigsByStatusContaining(String status);
+//    Optional<List<Pig>> findPigsByWeightBetween(double weightMin, double weightMax);
+    Optional<List<Pig>> findPigsByCote_CodeAndDateOutIsNull(String code);
 }

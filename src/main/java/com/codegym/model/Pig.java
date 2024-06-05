@@ -15,6 +15,8 @@ public class Pig {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(unique = true)
+    private String code;
     private LocalDate dateIn;
     private LocalDate dateOut;
     private String status;
@@ -22,6 +24,6 @@ public class Pig {
 
     @ManyToOne
     @JoinColumn(name = "cote_id", referencedColumnName = "id")
-    private Cote room;
+    private Cote cote;
 
 }

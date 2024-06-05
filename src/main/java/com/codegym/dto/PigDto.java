@@ -16,6 +16,10 @@ import java.util.Objects;
 @Builder
 public class PigDto {
     private int id;
+    @NotBlank
+    @NotNull
+    @NotEmpty
+    private String code;
     @NotNull
     private LocalDate dateIn;
 
