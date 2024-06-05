@@ -3,6 +3,7 @@ package com.codegym.controller;
 import com.codegym.dto.StaffDto;
 import com.codegym.model.Account;
 import com.codegym.service.IAccountService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,7 +20,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("staff")
+@RequestMapping("/staff")
 public class StaffRestController {
 
     @Autowired
@@ -59,9 +60,8 @@ public class StaffRestController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<?> showAllProduct(@RequestBody StaffDto staffDto, String name) {
-//        List<Account> productPage = this.iAccountService.getAllName("thuy nhu");
-        return new ResponseEntity<>(this.iAccountService.getAllName(staffDto.getName()), HttpStatus.OK);
+    public ResponseEntity<?> showAllProduct(@RequestBody StaffDto staffDto) {
+        return new ResponseEntity<>(this.iAccountService.getAllName(staffDto.getUsername()), HttpStatus.OK);
     }
 
 

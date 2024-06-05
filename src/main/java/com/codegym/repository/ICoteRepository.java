@@ -15,5 +15,6 @@ public interface ICoteRepository extends JpaRepository<Cote,Integer> {
     Optional<List<Cote>> findByDateCloseBetween ( LocalDate startDate, LocalDate endDate);
     Optional<List<Cote>> findByDateCloseBetweenAndAccount_Code ( LocalDate startDate, LocalDate endDate, String code);
     Optional<List<Cote>> findByDateOpenBetweenAndAccount_Code ( LocalDate startDate, LocalDate endDate, String code);
+    List<Cote> findCotesByDateCloseIsNull();
 
 }
