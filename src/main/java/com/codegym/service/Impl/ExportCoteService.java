@@ -46,14 +46,11 @@ public class ExportCoteService implements IExportCoteService {
     @Override
     public ExportCote addExportCote(ExportCoteRequest exportCoteRequest) {
         Cote cote = iCoteRepository.findById(exportCoteRequest.getCote_id()).get();
-        if(cote.getQuantity() < exportCoteRequest.getAmount()){
-            throw new RuntimeException();
-        }
         cote.setQuantity(0);
         cote.setDateClose(LocalDate.now());
         ExportCote exportCote = new ExportCote();
         exportCote.setWeight(exportCoteRequest.getWeight());
-        exportCote.setAmount(exportCoteRequest.getAmount());
+        exportCote.setAmount(cote.getQuantity());
         exportCote.setPartner(exportCoteRequest.getPartner());
         exportCote.setPrice(exportCoteRequest.getPrice());
         exportCote.setCote(cote);
