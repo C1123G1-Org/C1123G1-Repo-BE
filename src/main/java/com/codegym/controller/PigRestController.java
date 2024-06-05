@@ -21,8 +21,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @CrossOrigin("http://localhost:3000")
@@ -33,22 +32,19 @@ public class PigRestController {
     @Autowired
     private ICoteService coteService;
 
-//    @GetMapping
-//    public ResponseEntity<List<Pig>> listPigs(){
-//        List<Pig> list = pigService.findAll();
-//        if (list.isEmpty()){
-//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//        }
-//        for (Pig pig: list) {
-//            System.out.println(pig.toString());
-//        }
-//        return new ResponseEntity<>(list,HttpStatus.OK);
-//    }
+    @GetMapping("/coteList")
+    public ResponseEntity<List<Cote>> listCote(){
+        List<Cote> coteList = coteService.findAll();
+        if (coteList.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(coteList,HttpStatus.OK);
+    }
 
     @GetMapping("/{pageSize}")
     public ResponseEntity<Page<Pig>> listPigPage(@PathVariable Integer pageSize,
                                                  @RequestParam(value = "page") Integer page){
-        Pageable pageable = PageRequest.of(page,pageSize, Sort.by("dateIn").descending());
+        Pageable pageable = PageRequest.of(page,pageSize, Sort.by("id").descending());
         Page<Pig> list = pigService.findAll(pageable);
         if (list.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -102,7 +98,7 @@ public class PigRestController {
         if (!PigOptional.isPresent()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        Cote coteOld = PigOptional.get().getRoom();
+        Cote coteOld = PigOptional.get().getCote();
         coteOld.setQuantity(coteOld.getQuantity()-1);
         if (coteOld.getQuantity() == 0) {
             coteOld.setDateClose(LocalDate.now());
@@ -117,7 +113,7 @@ public class PigRestController {
         if (!PigOptional.isPresent()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        Cote coteOld = PigOptional.get().getRoom();
+        Cote coteOld = PigOptional.get().getCote();
         coteOld.setQuantity(coteOld.getQuantity()-1);
         if (coteOld.getQuantity() == 0) {
             coteOld.setDateClose(LocalDate.now());
@@ -132,4 +128,6 @@ public class PigRestController {
         pigService.update(id, updatePig);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+
 }

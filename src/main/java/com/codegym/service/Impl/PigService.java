@@ -51,7 +51,16 @@ public class PigService implements IPigService {
         return pigRepository.findPigsByStatus(pageable, status);
     }
 
-//    @Override
+    @Override
+    public Optional<List<Pig>> findPigsByCote_IdAndDateOutIsNull(int id) {
+        return pigRepository.findPigsByCote_IdAndDateOutIsNull(id);
+    }
+
+    @Override
+    public Pig findPigsByCode(String code) {
+        return pigRepository.findPigsByCode(code);
+    }
+    //    @Override
 //    public List<Pig> findPigsByWeight(double weight) {
 //        return pigRepository.findPigsByWeight(weight);
 //    }

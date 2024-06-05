@@ -21,5 +21,6 @@ public interface IPigService {
 //    Optional<List<Pig>> findPigsByRoom(Cote room);
 //    Optional<List<Pig>> findPigsByStatusContaining(String status);
 //    Optional<List<Pig>> findPigsByWeightBetween(double weightMin, double weightMax);
-
+    Optional<List<Pig>> findPigsByCote_IdAndDateOutIsNull(int id);
+    Pig findPigsByCode(String code);
 }
