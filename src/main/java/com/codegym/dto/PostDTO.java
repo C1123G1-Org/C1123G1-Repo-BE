@@ -16,7 +16,7 @@ public class PostDTO {
     private String title;
     private String content;
     private String image;
-    private String status = "POSTED";
+    private String status;
     private LocalDateTime postDate;
     private Integer accountId;
 }
