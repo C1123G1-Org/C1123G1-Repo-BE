@@ -164,6 +164,20 @@ public class CoteRestController {
         return new ResponseEntity<>(object, HttpStatus.OK);
     }
 
+    @PutMapping("/updatePigsAfterExportCote")
+    public ResponseEntity<Cote> updatePigs(@RequestParam("code") String code) {
+        try {
+        List<Pig> pigs = pigService.findPigsByCote_Code(code).get();
+        for (int i = 0; i < pigs.size(); i++) {
+            pigs.get(i).setDateOut(LocalDate.now());
+            pigService.save(pigs.get(i));
+        }
+        } catch (DataIntegrityViolationException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Cote> updateCote(@Valid @RequestBody CoteDto coteDto,
                                            @PathVariable Integer id) {
