@@ -89,13 +89,13 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/posts/**")
                         .permitAll()
                         .requestMatchers("/api/cotes/**")
-                        .hasRole("ADMIN")
+                        .authenticated()
                         .requestMatchers("/api/pigs/**")
-                        .hasRole("ADMIN")
+                        .authenticated()
                         .requestMatchers("/api/exportcotes/**")
-                        .hasRole("ADMIN")
+                        .authenticated()
                         .requestMatchers("/staff/**")
-                        .hasRole("ADMIN"));
+                        .authenticated());
         return http.build();
     }
 
