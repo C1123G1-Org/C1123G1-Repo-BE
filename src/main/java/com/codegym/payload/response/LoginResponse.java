@@ -18,7 +18,6 @@ public class LoginResponse {
 
     private String username;
 
-
     public LoginResponse(@NotBlank String message,
                          String token,
                          int expiresIn,
@@ -63,5 +62,13 @@ public class LoginResponse {
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }
