@@ -11,11 +11,11 @@ import java.util.List;
 
 public interface IAccountRepository extends JpaRepository<Account, Integer> {
 
-    @Query(value = " select * from account ", nativeQuery = true)
-    Page<Account> findAllPage(Pageable pageable);
+    @Query(value = " select * from account where username like :name", nativeQuery = true)
+    Page<Account> findAllPage(Pageable pageable,@Param("name") String name);
 
-    @Query(value = "select * from account WHERE username =:username", nativeQuery = true)
-    List<Account> findByName(@Param("username") String name);
+//    @Query(value = "select * from account WHERE username =:username", nativeQuery = true)
+//    List<Account> findByName(@Param("username") String name);
 
 
 }
