@@ -35,10 +35,16 @@ public class PigRestController {
     @GetMapping("/coteList")
     public ResponseEntity<List<Cote>> listCote(){
         List<Cote> coteList = coteService.findAll();
-        if (coteList.isEmpty()){
+        List<Cote> coteListAvaiable = new ArrayList<>();
+        for (Cote c: coteList) {
+            if (c.getDateClose() == null ) {
+                coteListAvaiable.add(c);
+            }
+        }
+        if (coteListAvaiable.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(coteList,HttpStatus.OK);
+        return new ResponseEntity<>(coteListAvaiable,HttpStatus.OK);
     }
 
     @GetMapping("/{pageSize}")
@@ -52,15 +58,20 @@ public class PigRestController {
         return new ResponseEntity<>(list,HttpStatus.OK);
     }
 
-    @GetMapping("/statusSearch")
-    public ResponseEntity<Page<Pig>> listPigsSearchByStatus(@PageableDefault(value = 3) Pageable pageable,
-                                                            @RequestParam("status") String status){
-        Page<Pig> list = pigService.findPigsByStatus(pageable, status);
-        if (list.isEmpty()){
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(list,HttpStatus.OK);
-    }
+//    @GetMapping("/statusSearch")
+//    public ResponseEntity<Optional<List<Pig>>> listPigsSearchByStatus(
+//                                                            @RequestParam("status") String status){
+//        Optional<List<Pig>> list = pigService.findPigsByStatus(status);
+//        System.out.println("hello");
+//        System.out.println((status));
+//        for (Pig p: list.get()) {
+//            System.out.println(p.toString());
+//        }
+//        if (list.isEmpty()){
+//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//        }
+//        return new ResponseEntity<>(list,HttpStatus.OK);
+//    }
 //    @GetMapping("/search/weight")
 //    public ResponseEntity<List<Pig>> searchOpenTime(
 //                                                     @RequestParam("weightMin")double weightMin,
@@ -76,7 +87,7 @@ public class PigRestController {
     public ResponseEntity<PigDto> createPig(@Valid @RequestBody PigDto pigDto){
         Pig addPig = new Pig();
         BeanUtils.copyProperties(pigDto, addPig);
-        Cote cote = pigDto.getRoom();
+        Cote cote = pigDto.getCote();
         cote.setQuantity(cote.getQuantity()+1);
         coteService.save(cote);
         pigService.save(addPig);
@@ -118,7 +129,7 @@ public class PigRestController {
         if (coteOld.getQuantity() == 0) {
             coteOld.setDateClose(LocalDate.now());
         }
-        Cote coteNew = pigDto.getRoom();
+        Cote coteNew = pigDto.getCote();
         coteNew.setQuantity(coteNew.getQuantity()+1);
         coteService.save(coteOld);
 
@@ -129,5 +140,72 @@ public class PigRestController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+
+    /////////////////////////////
+    @GetMapping("/search")
+    public ResponseEntity<List<Pig>> searchCodeCote(@RequestParam("code") String code) {
+        Optional<List<Pig>> pigOptional = pigService.findPigsByCote_Code(code);
+        if (!pigOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        for (Pig p: pigOptional.get()) {
+            System.out.println(p.toString());
+        }
+        return new ResponseEntity<>(pigOptional.get(), HttpStatus.OK);
+    }
+
+    @GetMapping("/search/in")
+    public ResponseEntity<List<Pig>> searchInTime(@RequestParam("startDate") LocalDate startDate,
+                                                     @RequestParam("endDate") LocalDate endDate) {
+        Optional<List<Pig>> listOptional = pigService.findByDateInBetween(startDate, endDate);
+        if (!listOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        for (Pig p: listOptional.get()) {
+            System.out.println(p.toString());
+        }
+        return new ResponseEntity<>(listOptional.get(), HttpStatus.OK);
+    }
+
+    @GetMapping("/search/in/cote")
+    public ResponseEntity<List<Pig>> searchInTimeAndCote(@RequestParam("startDate") LocalDate startDate,
+                                                               @RequestParam("endDate") LocalDate endDate,
+                                                               @RequestParam("code") String code) {
+        Optional<List<Pig>> listOptional = pigService.findByDateInBetweenAndCote_Code(startDate, endDate, code);
+        if (!listOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        for (Pig p: listOptional.get()) {
+            System.out.println(p.toString());
+        }
+        return new ResponseEntity<>(listOptional.get(), HttpStatus.OK);
+    }
+
+    @GetMapping("/search/out")
+    public ResponseEntity<List<Pig>> searchOutTime(@RequestParam("startDate") LocalDate startDate,
+                                                      @RequestParam("endDate") LocalDate endDate) {
+        Optional<List<Pig>> listOptional = pigService.findByDateOutBetween(startDate, endDate);
+        if (!listOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        for (Pig p: listOptional.get()) {
+            System.out.println(p.toString());
+        }
+        return new ResponseEntity<>(listOptional.get(), HttpStatus.OK);
+    }
+
+    @GetMapping("/search/out/cote")
+    public ResponseEntity<List<Pig>> searchOutTimeAndCote(@RequestParam("startDate") LocalDate startDate,
+                                                                @RequestParam("endDate") LocalDate endDate,
+                                                                @RequestParam("code") String code) {
+        Optional<List<Pig>> listOptional = pigService.findByDateOutBetweenAndCote_Code(startDate, endDate, code);
+        if (!listOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        for (Pig p: listOptional.get()) {
+            System.out.println(p.toString());
+        }
+        return new ResponseEntity<>(listOptional.get(), HttpStatus.OK);
+    }
 
 }

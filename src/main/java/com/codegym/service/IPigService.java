@@ -16,10 +16,12 @@ public interface IPigService {
     void update(int id,Pig pig);
     void remove(int id);
     Optional<Pig> findById(int id);
-    Page<Pig> findPigsByStatus(Pageable pageable, String status);
-//    List<Pig> findPigsByWeight(double weight);
-//    Optional<List<Pig>> findPigsByRoom(Cote room);
-//    Optional<List<Pig>> findPigsByStatusContaining(String status);
-//    Optional<List<Pig>> findPigsByWeightBetween(double weightMin, double weightMax);
+    Optional<List<Pig>> findPigsByStatus(String status);
+    Optional<List<Pig>> findPigsByCote_Code(String code);
+    Optional<List<Pig>> findByDateInBetween( LocalDate startDate, LocalDate endDate);
+    Optional<List<Pig>> findByDateInBetweenAndCote_Code( LocalDate startDate, LocalDate endDate, String code);
+    Optional<List<Pig>> findByDateOutBetween( LocalDate startDate, LocalDate endDate);
+    Optional<List<Pig>> findByDateOutBetweenAndCote_Code( LocalDate startDate, LocalDate endDate, String code);
+    Optional<List<Pig>> findPigsByWeightBetween(double weightMin, double weightMax);
     Optional<List<Pig>> findPigsByCote_CodeAndDateOutIsNull(String code);
 }
