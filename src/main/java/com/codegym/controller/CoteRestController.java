@@ -1,5 +1,6 @@
 package com.codegym.controller;
 
+import com.codegym.dto.ChangeCoteRequest;
 import com.codegym.dto.CoteDto;
 import com.codegym.model.Cote;
 import com.codegym.model.Pig;
@@ -17,16 +18,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 @CrossOrigin("http://localhost:3000")
@@ -37,17 +36,18 @@ public class CoteRestController {
     @Autowired
     private IPigService pigService;
 
-        @GetMapping("/getCodes")
-    public ResponseEntity<List<Cote>> listCotes(){
-            List<Cote> list = coteService.findCotesByDateCloseIsNull();
-            if (list.isEmpty()) {
+    @GetMapping("/getCodes")
+    public ResponseEntity<List<Cote>> listCotes() {
+        List<Cote> list = coteService.findCotesByDateCloseIsNull();
+        if (list.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(list,HttpStatus.OK);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
+
     @GetMapping("/pigs")
-    public ResponseEntity<List<Pig>> findAllPigByCote_Code(@RequestParam("code") String code) {
-        Optional<List<Pig>> pigsOptional = pigService.findPigsByCote_CodeAndDateOutIsNull(code);
+    public ResponseEntity<List<Pig>> findAllPigByCote_Code(@RequestParam("id") int id) {
+        Optional<List<Pig>> pigsOptional = pigService.findPigsByCote_IdAndDateOutIsNull(id);
         if (!pigsOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -132,6 +132,36 @@ public class CoteRestController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PutMapping("/changes")
+    @Transactional
+    public ResponseEntity<?> changesCote(@RequestBody ChangeCoteRequest object){
+        try {
+            Cote oldCote = object.getOldCote();
+            oldCote.setQuantity(oldCote.getQuantity() - object.getPigs().size());
+            if (oldCote.getQuantity() == 0) {
+                oldCote.setDateClose(LocalDate.now());
+            }
+            coteService.update(oldCote);
+
+            Cote newCote = object.getNewCote();
+            newCote.setQuantity(newCote.getQuantity() + object.getPigs().size());
+            coteService.update(newCote);
+
+            List<Pig> pigList = new ArrayList<>();
+            List<String> pigs = object.getPigs();
+            for (String pig : pigs) {
+                pigList.add(pigService.findPigsByCode(pig));
+            }
+            for (Pig pig : pigList) {
+                pig.setCote(newCote);
+                pigService.save(pig);
+            }
+        }catch (RuntimeException e) {
+            throw new RuntimeException("Oops, something went wrong!");
+        }
+        return new ResponseEntity<>(object, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")

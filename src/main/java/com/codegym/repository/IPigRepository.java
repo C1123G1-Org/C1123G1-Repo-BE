@@ -18,5 +18,8 @@ public interface IPigRepository extends JpaRepository<Pig, Integer> {
     Optional<List<Pig>> findByDateOutBetween( LocalDate startDate, LocalDate endDate);
     Optional<List<Pig>> findByDateOutBetweenAndCote_Code( LocalDate startDate, LocalDate endDate, String code);
     Optional<List<Pig>> findPigsByWeightBetween(double weightMin, double weightMax);
-        Optional<List<Pig>> findPigsByCote_CodeAndDateOutIsNull(String code);
+
+        // Anh Bình
+        Optional<List<Pig>> findPigsByCote_IdAndDateOutIsNull(int id);
+        Pig findPigsByCode(String code);
 }
