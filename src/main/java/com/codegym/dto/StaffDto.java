@@ -5,24 +5,18 @@ import lombok.*;
 import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
+@Getter
+@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class StaffDto {
+    private Integer page;
+    private Integer Size;
+    private String SortDirection;
+    private Integer SortBy;
 
 
-public interface StaffDto {
-    int getId();
 
-    String getCode();
-
-    String getUsername();
-
-    String getPassword();
-
-    String getFullName();
-
-    String getEmail();
-
-    Boolean getGender();
-
-    String getIdentityCode();
-
-    LocalDate getDate();
 }
