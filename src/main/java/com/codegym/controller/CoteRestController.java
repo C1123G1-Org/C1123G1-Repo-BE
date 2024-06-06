@@ -136,6 +136,50 @@ public class CoteRestController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @PutMapping("/changes")
+    @Transactional
+    public ResponseEntity<?> changesCote(@RequestBody ChangeCoteRequest object){
+        try {
+            Cote oldCote = object.getOldCote();
+            oldCote.setQuantity(oldCote.getQuantity() - object.getPigs().size());
+            if (oldCote.getQuantity() == 0) {
+                oldCote.setDateClose(LocalDate.now());
+            }
+            coteService.update(oldCote);
+
+            Cote newCote = object.getNewCote();
+            newCote.setQuantity(newCote.getQuantity() + object.getPigs().size());
+            coteService.update(newCote);
+
+            List<Pig> pigList = new ArrayList<>();
+            List<String> pigs = object.getPigs();
+            for (String pig : pigs) {
+                pigList.add(pigService.findPigsByCode(pig));
+            }
+            for (Pig pig : pigList) {
+                pig.setCote(newCote);
+                pigService.save(pig);
+            }
+        }catch (RuntimeException e) {
+            throw new RuntimeException("Oops, something went wrong!");
+        }
+        return new ResponseEntity<>(object, HttpStatus.OK);
+    }
+
+    @PutMapping("/updatePigsAfterExportCote")
+    public ResponseEntity<Cote> updatePigs(@RequestParam("code") String code) {
+        try {
+        List<Pig> pigs = pigService.findPigsByCote_Code(code).get();
+        for (int i = 0; i < pigs.size(); i++) {
+            pigs.get(i).setDateOut(LocalDate.now());
+            pigService.save(pigs.get(i));
+        }
+        } catch (DataIntegrityViolationException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Cote> updateCote(@Valid @RequestBody CoteDto coteDto,
                                            @PathVariable Integer id) {
