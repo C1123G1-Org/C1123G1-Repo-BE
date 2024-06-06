@@ -47,13 +47,15 @@ public class AuthController {
             return new ResponseEntity<>(new LoginResponse("Đăng nhập thành công!",
                     token,
                     jwtExpirationInMs,
-                    userDetails.getAuthorities()),
+                    userDetails.getAuthorities(),
+                    userDetails.getUsername()),
                     HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(new LoginResponse("Đăng nhập thất bại!",
                     null,
-                    jwtExpirationInMs,
+                    0,
+                    null,
                     null),
                     HttpStatus.BAD_REQUEST);
         }
