@@ -32,7 +32,7 @@ public class PigDto {
     @Min(1)
     private double weight;
     @NotNull
-    private Cote room;
+    private Cote cote;
 
     @Override
     public boolean equals(Object o) {

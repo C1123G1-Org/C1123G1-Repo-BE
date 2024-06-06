@@ -19,7 +19,7 @@ public interface IAccountService {
 
     Page<Account> findAllPage(Pageable pageable,String name);
 
-//    List<Account> getAllName(String name);
+
 
 
 
