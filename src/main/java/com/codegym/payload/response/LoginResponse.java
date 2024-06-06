@@ -16,16 +16,20 @@ public class LoginResponse {
     @Nullable
     private int expiresIn;
 
+    private String username;
+
 
     public LoginResponse(@NotBlank String message,
                          String token,
                          int expiresIn,
-                         Collection<? extends GrantedAuthority> authorities) {
+                         Collection<? extends GrantedAuthority> authorities,
+                         String username) {
         super();
         this.message = message;
         this.token = token;
         this.expiresIn = expiresIn;
         this.authorities = authorities;
+        this.username = username;
     }
 
     public LoginResponse(Collection<? extends GrantedAuthority> authorities) {
