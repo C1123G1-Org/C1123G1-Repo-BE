@@ -1,5 +1,6 @@
 package com.codegym.controller;
 
+import com.codegym.dto.AccountDto;
 import com.codegym.dto.StaffDto;
 import com.codegym.model.Account;
 import com.codegym.service.IAccountService;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,15 +28,13 @@ public class StaffRestController {
     @Autowired
     private IAccountService iAccountService;
 
-    @PostMapping(value = "")
-    public ResponseEntity<?> getPage(@RequestBody StaffDto staffDto) {
-        Page<Account> accounts = this.iAccountService.getAllPage(staffDto);
-        return new ResponseEntity<>(accounts, HttpStatus.OK);
-    }
 
     @GetMapping("")
-    public ResponseEntity<?> getAllStaff() {
-        List<Account> listStaff = iAccountService.findAll();
+    public ResponseEntity<?> getAllStaff(@RequestParam(defaultValue = "0") int page,
+                                         @RequestParam(defaultValue = "") String name) {
+        System.out.println("a");
+        Pageable pageable = PageRequest.of(page, 5);
+        Page<Account> listStaff = iAccountService.findAllPage(pageable,name);
         return new ResponseEntity<>(listStaff, HttpStatus.OK);
     }
 
@@ -64,10 +64,7 @@ public class StaffRestController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<?> showAllProduct(@RequestBody StaffDto staffDto) {
-        return new ResponseEntity<>(this.iAccountService.getAllName(staffDto.getUsername()), HttpStatus.OK);
-    }
+
 
 
 }

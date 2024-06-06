@@ -8,6 +8,7 @@ import com.codegym.service.IAccountService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -36,9 +37,7 @@ public class AccountService implements IAccountService {
 
     @Override
     public Account findById(Integer id) {
-        return iAccountRepository
-                .findById(id)
-                .get();
+        return iAccountRepository.findById(id).get();
     }
 
     @Override
@@ -47,30 +46,8 @@ public class AccountService implements IAccountService {
     }
 
     @Override
-    public Page<Account> getAllPage(StaffDto staffDto) {
-        return null;
-    }
-
-//    @Override
-//    public Page<Account> getAllPage(StaffDto staffDto) {
-//        Pageable pageable = PageRequest.of(staffDto.getPage(),
-//                staffDto.getSize(),
-//                staffDto.getSortDirection(),
-//                staffDto.getSortBy());
-//        Page<Account> accounts = this.iAccountRepository.findAllPage(pageable);
-//
-//        return accounts;
-//
-//    }
-
-    @Override
-    public List<Account> getAllName(String name) {
-        return iAccountRepository.findByName(name);
-    }
-
-    @Override
-    public Account findByUsername(String username) {
-        return iAccountRepository.findByUsername(username);
+    public Page<Account> findAllPage(Pageable pageable, String name) {
+        return iAccountRepository.findAllPage(pageable,"%" +name+"%");
     }
 
     @Override
