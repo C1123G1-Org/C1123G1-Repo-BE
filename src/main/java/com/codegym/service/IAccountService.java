@@ -1,5 +1,6 @@
 package com.codegym.service;
 
+import com.codegym.dto.AccountDto;
 import com.codegym.dto.StaffDto;
 import com.codegym.model.Account;
 import org.springframework.data.domain.Page;
@@ -25,4 +26,5 @@ public interface IAccountService {
     Account findByUsername(String username);
 //    Page<Account> findByName(String name);
 
+    AccountDto getCurrentAccount();
 }
