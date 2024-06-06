@@ -40,43 +40,52 @@ public class PigService implements IPigService {
     public void remove(int id) {
         pigRepository.deleteById(id);
     }
-
     @Override
     public Optional<Pig> findById(int id) {
         return pigRepository.findById(id);
     }
 
     @Override
-    public Page<Pig> findPigsByStatus(Pageable pageable, String status) {
-        return pigRepository.findPigsByStatus(pageable, status);
+    public Optional<List<Pig>> findPigsByStatus(String status) {
+        return pigRepository.findPigsByStatus(status);
+    }
+
+    @Override
+    public Optional<List<Pig>> findPigsByCote_Code(String code) {
+        return pigRepository.findPigsByCote_Code(code);
+    }
+
+    @Override
+    public Optional<List<Pig>> findByDateInBetween(LocalDate startDate, LocalDate endDate) {
+        return pigRepository.findByDateInBetween(startDate,endDate);
+    }
+
+    @Override
+    public Optional<List<Pig>> findByDateInBetweenAndCote_Code(LocalDate startDate, LocalDate endDate, String code) {
+        return pigRepository.findByDateInBetweenAndCote_Code(startDate, endDate, code);
+    }
+
+    @Override
+    public Optional<List<Pig>> findByDateOutBetween(LocalDate startDate, LocalDate endDate) {
+        return pigRepository.findByDateOutBetween(startDate, endDate);
+    }
+
+    @Override
+    public Optional<List<Pig>> findByDateOutBetweenAndCote_Code(LocalDate startDate, LocalDate endDate, String code) {
+        return pigRepository.findByDateOutBetweenAndCote_Code(startDate, endDate, code);
+    }
+
+    @Override
+    public Optional<List<Pig>> findPigsByWeightBetween(double weightMin, double weightMax) {
+        return pigRepository.findPigsByWeightBetween(weightMin, weightMax);
     }
 
     @Override
     public Optional<List<Pig>> findPigsByCote_IdAndDateOutIsNull(int id) {
         return pigRepository.findPigsByCote_IdAndDateOutIsNull(id);
     }
-
     @Override
     public Pig findPigsByCode(String code) {
         return pigRepository.findPigsByCode(code);
     }
-    //    @Override
-//    public List<Pig> findPigsByWeight(double weight) {
-//        return pigRepository.findPigsByWeight(weight);
-//    }
-//
-//    @Override
-//    public Optional<List<Pig>> findPigsByRoom(Cote room) {
-//        return pigRepository.findPigsByRoom(room);
-//    }
-//
-//    @Override
-//    public Optional<List<Pig>> findPigsByStatusContaining(String status) {
-//        return pigRepository.findPigsByStatusContaining(status);
-//    }
-//
-//    @Override
-//    public Optional<List<Pig>> findPigsByWeightBetween(double weightMin, double weightMax) {
-//        return pigRepository.findPigsByWeightBetween(weightMin, weightMax);
-//    }
 }

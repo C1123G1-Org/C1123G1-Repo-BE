@@ -44,6 +44,11 @@ public class StaffRestController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> ByIdStaff(@PathVariable Integer id) {
+        Account account = iAccountService.findById(id);
+        return new ResponseEntity<>(account, HttpStatus.OK);
+    }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateStaff(@PathVariable Integer id, @RequestBody Account account) {
