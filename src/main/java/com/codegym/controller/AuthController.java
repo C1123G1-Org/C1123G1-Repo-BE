@@ -38,9 +38,6 @@ public class AuthController {
                     .setAuthentication(authentication);
 
             String token = tokenProvider.generateToken(authentication);
-            if (token == null) {
-                jwtExpirationInMs = 0;
-            }
 
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
