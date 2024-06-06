@@ -22,7 +22,7 @@ public interface IAccountService {
 
     List<Account> getAllName(String name);
 
-
+    Account findByUsername(String username);
 //    Page<Account> findByName(String name);
 
 }
