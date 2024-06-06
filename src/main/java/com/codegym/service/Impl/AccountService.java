@@ -34,7 +34,9 @@ public class AccountService implements IAccountService {
 
     @Override
     public Account findById(Integer id) {
-        return iAccountRepository.findById(id).get();
+        return iAccountRepository
+                .findById(id)
+                .get();
     }
 
     @Override
@@ -44,13 +46,13 @@ public class AccountService implements IAccountService {
 
     @Override
     public Page<Account> getAllPage(StaffDto staffDto) {
-//        Pageable pageable = PageRequest.of(staffDto.getPage(), staffDto.getSize(), staffDto.getSortDirection(),
-//                staffDto.getSortBy());
-//        Page<Account> accounts = this.iAccountRepository.findAllPage(pageable);
-//
-//        return accounts;
+        Pageable pageable = PageRequest.of(staffDto.getPage(),
+                staffDto.getSize(),
+                staffDto.getSortDirection(),
+                staffDto.getSortBy());
+        Page<Account> accounts = this.iAccountRepository.findAllPage(pageable);
 
-        return null;
+        return accounts;
 
     }
 
@@ -59,7 +61,10 @@ public class AccountService implements IAccountService {
         return iAccountRepository.findByName(name);
     }
 
-
+    @Override
+    public Account findByUsername(String username) {
+        return iAccountRepository.findByUsername(username);
+    }
 
 
 }
