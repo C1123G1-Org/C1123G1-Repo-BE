@@ -18,6 +18,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 
 @Configuration
@@ -53,21 +56,22 @@ public class SecurityConfiguration {
                 .passwordEncoder(new BCryptPasswordEncoder());
     }
 
-//    public CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration corsConfig = new CorsConfiguration();
-//        corsConfig.addAllowedOrigin("*");
-//        corsConfig.addAllowedHeader("*");
-//        corsConfig.addAllowedMethod("*");
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/*",
-//                corsConfig);
-//        return source;
-//    }
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration corsConfig = new CorsConfiguration();
+        corsConfig.addAllowedOrigin("*");
+        corsConfig.addAllowedHeader("*");
+        corsConfig.addAllowedMethod("*");
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**",
+                corsConfig);
+        return source;
+    }
 
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-//                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(csrf -> csrf.disable()/*.ignoringRequestMatchers("/api/**")*/)
                 .exceptionHandling(customizer -> customizer
                         .authenticationEntryPoint(unauthorizedHandler)
                         .accessDeniedPage("/api/auth/access-denied"))
@@ -80,17 +84,18 @@ public class SecurityConfiguration {
                 .addFilterBefore(jwtAuthenticationFilter(),
                         UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**")
+                        .requestMatchers("/api/auth/login/**")
                         .permitAll()
                         .requestMatchers("/api/posts/**")
-                        .hasRole("USER")
-//                        .authenticated()
-//                        .requestMatchers("/api/user/**")
-//                        .hasAnyRole("USER",
-//                                "ADMIN")
+                        .permitAll()
                         .requestMatchers("/api/cotes/**")
-                        .hasRole("USER"))
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**"));
+                        .hasRole("ADMIN")
+                        .requestMatchers("/api/pigs/**")
+                        .hasRole("ADMIN")
+                        .requestMatchers("/api/exportcotes/**")
+                        .hasRole("ADMIN")
+                        .requestMatchers("/staff/**")
+                        .hasRole("ADMIN"));
         return http.build();
     }
 
