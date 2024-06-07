@@ -48,19 +48,7 @@ public class AccountService implements IAccountService {
     }
 
 
-//    @Override
-//    public Page<Account> getAllPage(StaffDto staffDto) {
-//        Pageable pageable = PageRequest.of(staffDto.getPage(), staffDto.getSize());
-//        Page<Account> accounts = this.iAccountRepository.findAllPage(pageable);
-//
-//        return accounts;
-//
-//    }
 
-//    @Override
-//    public List<Account> getAllName(String name) {
-//        return iAccountRepository.findByName(name);
-//    }
 
 
 
