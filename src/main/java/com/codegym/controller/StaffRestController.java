@@ -40,8 +40,29 @@ public class StaffRestController {
 
     @PostMapping("/create")
     public ResponseEntity<?> createStaff(@RequestBody Account account) {
-        iAccountService.save(account);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+
+        List<Account> accountList = iAccountService.findAll();
+
+        String result = "";
+        //1 tuong ung trung code, 2 trung username, 3 trung can cuoc
+        for (int i = 0; i < accountList.size(); i++) {
+            if (account.getCode().equals(accountList.get(i).getCode())){
+                result += "1";
+            }
+            if (account.getUsername().equals(accountList.get(i).getUsername())){
+                result += "2";
+            }
+            if (account.getIdentityCode().equals(accountList.get(i).getIdentityCode())){
+                result+= "3";
+            }
+        }
+
+        if (result == "") {
+            iAccountService.save(account);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -52,9 +73,34 @@ public class StaffRestController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateStaff(@PathVariable Integer id, @RequestBody Account account) {
-        Account ok = iAccountService.findById(id);
-        iAccountService.updateS(account);
-        return new ResponseEntity<>(ok, HttpStatus.OK);
+        List<Account> accountList = iAccountService.findAll();
+
+        for (int i = 0; i < accountList.size(); i++) {
+            if (accountList.get(i).getId().equals(id)){
+                accountList.remove(i);
+                break;
+            }
+        }
+        String result = "";
+        //1 tuong ung trung code, 2 trung username, 3 trung can cuoc
+        for (int i = 0; i < accountList.size(); i++) {
+            if (account.getCode().equals(accountList.get(i).getCode())){
+                result += "1";
+            }
+            if (account.getUsername().equals(accountList.get(i).getUsername())){
+                result += "2";
+            }
+            if (account.getIdentityCode().equals(accountList.get(i).getIdentityCode())){
+                result+= "3";
+            }
+        }
+
+        if (result == "") {
+            iAccountService.save(account);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @DeleteMapping("/remove/{id}")
