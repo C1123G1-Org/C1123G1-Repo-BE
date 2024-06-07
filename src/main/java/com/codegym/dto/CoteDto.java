@@ -25,7 +25,7 @@ public class CoteDto {
     private LocalDate dateOpen;
     private LocalDate dateClose;
     @Min(value = 0,message = "Thấp nhất là 0")
-    @Max(15)
+    @Max(30)
     private int quantity;
     @NotNull
     private Account account;
