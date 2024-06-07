@@ -40,6 +40,9 @@ public class CoteRestController {
     @Autowired
     private IAccountRepository accountRepository;
 
+    @Autowired
+    private IAccountService accountService;
+
     @GetMapping("/getCodes")
     public ResponseEntity<List<Cote>> listCotes() {
         List<Cote> list = coteService.findCotesByDateCloseIsNull();
@@ -137,8 +140,10 @@ public class CoteRestController {
 
     @PostMapping
     public ResponseEntity<Cote> createCote(@Valid @RequestBody CoteDto coteDto) {
+        Account account = accountService.findById(coteDto.getAccount_id());
         Cote cote = new Cote();
         BeanUtils.copyProperties(coteDto, cote);
+        cote.setAccount(account);
         try {
             coteService.save(cote);
         } catch (DataIntegrityViolationException e) {
@@ -194,9 +199,10 @@ public class CoteRestController {
     @PutMapping("/{id}")
     public ResponseEntity<Cote> updateCote(@Valid @RequestBody CoteDto coteDto,
                                            @PathVariable Integer id) {
+        Account account = accountService.findById(coteDto.getAccount_id());
         Cote cote = new Cote();
-        BeanUtils.copyProperties(coteDto,
-                cote);
+        BeanUtils.copyProperties(coteDto, cote);
+        cote.setAccount(account);
         try {
             coteService.update(cote);
         } catch (DataIntegrityViolationException e) {

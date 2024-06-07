@@ -28,5 +28,5 @@ public class CoteDto {
     @Max(30)
     private int quantity;
     @NotNull
-    private Account account;
+    private Integer account_id;
 }
