@@ -20,18 +20,11 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(unique = true)
-
     private String code;
     @Column(unique = true)
-
     private String username;
-
-
     private String password;
-
-
     private String fullName;
-
     private String email;
     private Boolean gender;
     @Column(unique = true)
