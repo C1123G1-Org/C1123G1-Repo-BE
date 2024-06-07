@@ -84,7 +84,7 @@ public class SecurityConfiguration {
                 .addFilterBefore(jwtAuthenticationFilter(),
                         UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/login/**")
+                        .requestMatchers("/api/auth/login/**","/*")
                         .permitAll()
                         .requestMatchers("/api/posts/**")
                         .permitAll()
