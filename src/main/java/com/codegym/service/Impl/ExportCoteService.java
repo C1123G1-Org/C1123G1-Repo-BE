@@ -1,6 +1,7 @@
 package com.codegym.service.Impl;
 
 import com.codegym.dto.ExportCoteRequest;
+import com.codegym.model.Account;
 import com.codegym.model.Cote;
 import com.codegym.model.ExportCote;
 import com.codegym.repository.IAccountRepository;
@@ -9,6 +10,7 @@ import com.codegym.repository.IExportCoteRepository;
 import com.codegym.service.IExportCoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -29,22 +31,26 @@ public class ExportCoteService implements IExportCoteService {
 
     @Override
     public Page<ExportCote> findAll(Pageable pageable) {
-        return iExportCoteRepository.findAll(pageable);
+        Page<ExportCote> exportCotes = iExportCoteRepository.findAll(pageable);
+        for(int i = 0 ; i < exportCotes.getContent().size(); i++){
+            Account account = new Account();
+            account.setId(exportCotes.getContent().get(i).getAccount().getId());
+            account.setFullName(exportCotes.getContent().get(i).getAccount().getFullName());
+            exportCotes.getContent().get(i).setAccount(account);
+            exportCotes.getContent().get(i).getCote().setAccount(account);
+        }
+        return exportCotes;
     }
+
 
     @Override
     public ExportCote addExportCote(ExportCoteRequest exportCoteRequest) {
         Cote cote = iCoteRepository.findById(exportCoteRequest.getCote_id()).get();
-        if(cote.getQuantity() < exportCoteRequest.getAmount()){
-            throw new RuntimeException();
-        }
-        cote.setQuantity(cote.getQuantity() - exportCoteRequest.getAmount());
-        if(cote.getQuantity() != 0) {
-            cote.setDateClose(LocalDate.now());
-        }
+        cote.setQuantity(0);
+        cote.setDateClose(LocalDate.now());
         ExportCote exportCote = new ExportCote();
         exportCote.setWeight(exportCoteRequest.getWeight());
-        exportCote.setAmount(exportCoteRequest.getAmount());
+        exportCote.setAmount(cote.getQuantity());
         exportCote.setPartner(exportCoteRequest.getPartner());
         exportCote.setPrice(exportCoteRequest.getPrice());
         exportCote.setCote(cote);
@@ -72,6 +78,8 @@ public class ExportCoteService implements IExportCoteService {
     public void deleteExportCote(int id) {
         iExportCoteRepository.deleteById(id);
     }
+
+
 
 
 }

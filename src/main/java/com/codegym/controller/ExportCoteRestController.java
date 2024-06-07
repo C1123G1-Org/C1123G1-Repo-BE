@@ -29,8 +29,9 @@ public class ExportCoteRestController {
     @GetMapping
     public ResponseEntity<?> getAllExportCotes(@RequestParam(defaultValue = "0") int page){
         Page<ExportCote> exportCotes = iExportCoteService.findAll(PageRequest.of(page, 5));
-        return new ResponseEntity<>(exportCotes.getContent() ,HttpStatus.OK);
+        return new ResponseEntity<>(exportCotes ,HttpStatus.OK);
     }
+
 
     @PostMapping
     public ResponseEntity<?> addExportCotes(@RequestBody ExportCoteRequest exportCoteRequest){

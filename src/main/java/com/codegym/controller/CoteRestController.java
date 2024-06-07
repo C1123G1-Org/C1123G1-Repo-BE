@@ -6,7 +6,6 @@ import com.codegym.model.Cote;
 import com.codegym.model.Pig;
 import com.codegym.service.ICoteService;
 import com.codegym.service.IPigService;
-import jakarta.persistence.PersistenceException;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,17 +14,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin("http://localhost:3000")
@@ -33,6 +30,7 @@ import java.util.*;
 public class CoteRestController {
     @Autowired
     private ICoteService coteService;
+
     @Autowired
     private IPigService pigService;
 
@@ -55,13 +53,15 @@ public class CoteRestController {
     }
 
     @GetMapping("/{pageSize}")
-    public ResponseEntity<Page<Cote>> listCotesPage(@PathVariable Integer pageSize, @RequestParam(value = "page") Integer page) {
+    public ResponseEntity<Page<Cote>> listCotesPage(@PathVariable Integer pageSize,
+                                                    @RequestParam(value = "page") Integer page) {
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("dateOpen").descending());
         Page<Cote> list = coteService.findAll(pageable);
         if (list.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        return new ResponseEntity<>(list,
+                HttpStatus.OK);
     }
 
     @GetMapping("/search")
@@ -70,17 +70,19 @@ public class CoteRestController {
         if (!coteOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(coteOptional.get(), HttpStatus.OK);
+        return new ResponseEntity<>(coteOptional.get(),
+                HttpStatus.OK);
     }
 
     @GetMapping("/search/open")
     public ResponseEntity<List<Cote>> searchOpenTime(@RequestParam("startDate") LocalDate startDate,
                                                      @RequestParam("endDate") LocalDate endDate) {
-        Optional<List<Cote>> listOptional = coteService.findByDateOpenBetween(startDate, endDate);
+        Optional<List<Cote>> listOptional = coteService.findByDateOpenBetween(startDate,endDate);
         if (!listOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(listOptional.get(), HttpStatus.OK);
+        return new ResponseEntity<>(listOptional.get(),
+                HttpStatus.OK);
     }
 
     @GetMapping("/search/open/account")
@@ -91,17 +93,20 @@ public class CoteRestController {
         if (!listOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(listOptional.get(), HttpStatus.OK);
+        return new ResponseEntity<>(listOptional.get(),
+                HttpStatus.OK);
     }
 
     @GetMapping("/search/close")
     public ResponseEntity<List<Cote>> searchCloseTime(@RequestParam("startDate") LocalDate startDate,
                                                       @RequestParam("endDate") LocalDate endDate) {
-        Optional<List<Cote>> listOptional = coteService.findByDateCloseBetween(startDate, endDate);
+        Optional<List<Cote>> listOptional = coteService.findByDateCloseBetween(startDate,
+                endDate);
         if (!listOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(listOptional.get(), HttpStatus.OK);
+        return new ResponseEntity<>(listOptional.get(),
+                HttpStatus.OK);
     }
 
     @GetMapping("/search/close/account")
@@ -112,14 +117,16 @@ public class CoteRestController {
         if (!listOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(listOptional.get(), HttpStatus.OK);
+        return new ResponseEntity<>(listOptional.get(),
+                HttpStatus.OK);
     }
 
     @GetMapping("/find/{id}")
     public ResponseEntity<Cote> findCote(@PathVariable Integer id) {
         Optional<Cote> coteOptional = coteService.findById(id);
         if (!coteOptional.isPresent()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        return new ResponseEntity<>(coteOptional.get(), HttpStatus.OK);
+        return new ResponseEntity<>(coteOptional.get(),
+                HttpStatus.OK);
     }
 
     @PostMapping
@@ -164,11 +171,26 @@ public class CoteRestController {
         return new ResponseEntity<>(object, HttpStatus.OK);
     }
 
+    @PutMapping("/updatePigsAfterExportCote")
+    public ResponseEntity<Cote> updatePigs(@RequestParam("code") String code) {
+        try {
+        List<Pig> pigs = pigService.findPigsByCote_Code(code).get();
+        for (int i = 0; i < pigs.size(); i++) {
+            pigs.get(i).setDateOut(LocalDate.now());
+            pigService.save(pigs.get(i));
+        }
+        } catch (DataIntegrityViolationException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Cote> updateCote(@Valid @RequestBody CoteDto coteDto,
                                            @PathVariable Integer id) {
         Cote cote = new Cote();
-        BeanUtils.copyProperties(coteDto, cote);
+        BeanUtils.copyProperties(coteDto,
+                cote);
         try {
             coteService.update(cote);
         } catch (DataIntegrityViolationException e) {

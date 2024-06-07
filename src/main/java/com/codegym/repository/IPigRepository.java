@@ -11,11 +11,15 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IPigRepository extends JpaRepository<Pig, Integer> {
-    Page<Pig> findPigsByStatus(Pageable pageable, String status);
-//    Optional<List<Pig>> findPigsByStatusContaining(String status);
-//    List<Pig> findPigsByWeight(double weight);
-//    Optional<List<Pig>> findPigsByRoom(Cote room);
-//    Optional<List<Pig>> findPigsByWeightBetween(double weightMin, double weightMax);
+    Optional<List<Pig>> findPigsByStatus(String status);
+    Optional<List<Pig>> findPigsByCote_Code(String code);
+    Optional<List<Pig>> findByDateInBetween( LocalDate startDate, LocalDate endDate);
+    Optional<List<Pig>> findByDateInBetweenAndCote_Code( LocalDate startDate, LocalDate endDate, String code);
+    Optional<List<Pig>> findByDateOutBetween( LocalDate startDate, LocalDate endDate);
+    Optional<List<Pig>> findByDateOutBetweenAndCote_Code( LocalDate startDate, LocalDate endDate, String code);
+    Optional<List<Pig>> findPigsByWeightBetween(double weightMin, double weightMax);
+
+        // Anh Bình
         Optional<List<Pig>> findPigsByCote_IdAndDateOutIsNull(int id);
         Pig findPigsByCode(String code);
 }
