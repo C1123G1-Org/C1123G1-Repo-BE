@@ -18,7 +18,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class JwtUserDetailsService implements UserDetailsService {
-
     private final IAccountRepository accountRepository;
 
     @Override
@@ -30,7 +29,6 @@ public class JwtUserDetailsService implements UserDetailsService {
         }
 
         List<Role> roles = account.getRoles();
-
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
 
         for (Role role : roles) {

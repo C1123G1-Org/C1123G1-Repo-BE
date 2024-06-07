@@ -1,13 +1,16 @@
 package com.codegym.service.Impl;
 
+import com.codegym.dto.AccountDto;
 import com.codegym.dto.StaffDto;
 import com.codegym.model.Account;
 import com.codegym.repository.IAccountRepository;
 import com.codegym.service.IAccountService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,14 +46,22 @@ public class AccountService implements IAccountService {
     }
 
     @Override
-    public Page<Account> findAllPage(Pageable pageable,String name) {
+    public Page<Account> findAllPage(Pageable pageable, String name) {
         return iAccountRepository.findAllPage(pageable,"%" +name+"%");
     }
 
+    @Override
+    public AccountDto getCurrentAccount() {
+        Object principal = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
 
-
-
-
-
+        UserDetails currentUser = (UserDetails) principal;
+        AccountDto accountDto = new AccountDto();
+        BeanUtils.copyProperties(iAccountRepository.findByUsername(currentUser.getUsername()),
+                accountDto);
+        return accountDto;
+    }
 
 }
