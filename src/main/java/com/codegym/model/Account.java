@@ -2,6 +2,9 @@ package com.codegym.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -25,7 +28,9 @@ public class Account {
     private String email;
     private Boolean gender;
     @Column(unique = true)
+
     private String identityCode;
+
     private LocalDate date;
 
     @ManyToMany(fetch = FetchType.EAGER)
