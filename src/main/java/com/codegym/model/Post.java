@@ -24,6 +24,7 @@ public class Post {
     private String image;
     private String status;
     private LocalDateTime postDate;
+    private boolean isFocalPoint;
 
     @ManyToOne
     @JoinColumn(name = "account_id",
