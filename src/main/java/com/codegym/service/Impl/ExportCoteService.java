@@ -1,5 +1,6 @@
 package com.codegym.service.Impl;
 
+import com.codegym.dto.DeleteExportCotesRequest;
 import com.codegym.dto.ExportCoteRequest;
 import com.codegym.model.Account;
 import com.codegym.model.Cote;
@@ -81,7 +82,12 @@ public class ExportCoteService implements IExportCoteService {
         iExportCoteRepository.deleteById(id);
     }
 
-
+    @Override
+    public void deleteExportCotes(DeleteExportCotesRequest deleteExportCotesRequest) {
+        for(int id : deleteExportCotesRequest.getIdList()){
+            iExportCoteRepository.deleteById(id);
+        }
+    }
 
 
 }

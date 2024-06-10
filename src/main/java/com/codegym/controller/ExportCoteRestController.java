@@ -1,5 +1,6 @@
 package com.codegym.controller;
 
+import com.codegym.dto.DeleteExportCotesRequest;
 import com.codegym.dto.ExportCoteRequest;
 import com.codegym.model.ExportCote;
 import com.codegym.service.IExportCoteService;
@@ -61,6 +62,16 @@ public class ExportCoteRestController {
             iExportCoteService.deleteExportCote(id);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping
+    public ResponseEntity<?> deleteExportCotes(@RequestBody DeleteExportCotesRequest deleteExportCotesRequest){
+        try {
+            iExportCoteService.deleteExportCotes(deleteExportCotesRequest);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

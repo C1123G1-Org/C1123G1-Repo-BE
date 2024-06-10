@@ -1,5 +1,6 @@
 package com.codegym.service;
 
+import com.codegym.dto.DeleteExportCotesRequest;
 import com.codegym.dto.ExportCoteRequest;
 import com.codegym.model.ExportCote;
 import org.springframework.data.domain.Page;
@@ -16,5 +17,7 @@ public interface IExportCoteService {
     ExportCote updateExportCote(ExportCoteRequest exportCoteRequest);
 
     void deleteExportCote(int id);
+
+    void deleteExportCotes(DeleteExportCotesRequest deleteExportCotesRequest);
 
 }
