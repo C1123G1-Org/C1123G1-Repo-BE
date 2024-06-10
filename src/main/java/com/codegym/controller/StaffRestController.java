@@ -3,6 +3,7 @@ package com.codegym.controller;
 import com.codegym.dto.AccountDto;
 import com.codegym.dto.StaffDto;
 import com.codegym.model.Account;
+import com.codegym.model.Cote;
 import com.codegym.service.IAccountService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,6 +109,11 @@ public class StaffRestController {
         Account account = iAccountService.findById(id);
         iAccountService.delete(account);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @GetMapping("cote-a")
+    public ResponseEntity<?> findCote(){
+        List<Cote> coteList = iAccountService.findCoteManagement("trucvi");
+        return new ResponseEntity<>(coteList,HttpStatus.OK);
     }
 
 

@@ -2,6 +2,7 @@ package com.codegym.service;
 
 import com.codegym.dto.AccountDto;
 import com.codegym.model.Account;
+import com.codegym.model.Cote;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -22,4 +23,6 @@ public interface IAccountService {
                               String name);
 
     AccountDto getCurrentAccount();
+
+    List<Cote> findCoteManagement(String username);
 }
