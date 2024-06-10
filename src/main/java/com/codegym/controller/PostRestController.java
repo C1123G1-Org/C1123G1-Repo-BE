@@ -4,6 +4,7 @@ import com.codegym.dto.PostDTO;
 import com.codegym.model.Post;
 import com.codegym.service.IPostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,6 +47,13 @@ public class PostRestController {
                                            @RequestBody PostDTO postDTO) {
         return postService.update(id,
                 postDTO);
+    }
+
+    // Bình
+    @GetMapping("/mgt/{page}")
+    public ResponseEntity<Page<Post>> getPostWithPageAndStatus(@PathVariable int page,
+                                                               @RequestParam(value = "status") String status) {
+        return postService.getPostWithPageAndStatus(page,status);
     }
 }
 
