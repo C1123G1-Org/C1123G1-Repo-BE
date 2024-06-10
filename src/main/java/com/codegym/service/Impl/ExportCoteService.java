@@ -1,5 +1,6 @@
 package com.codegym.service.Impl;
 
+import com.codegym.dto.DeleteExportCotesRequest;
 import com.codegym.dto.ExportCoteRequest;
 import com.codegym.model.Account;
 import com.codegym.model.Cote;
@@ -46,14 +47,16 @@ public class ExportCoteService implements IExportCoteService {
     @Override
     public ExportCote addExportCote(ExportCoteRequest exportCoteRequest) {
         Cote cote = iCoteRepository.findById(exportCoteRequest.getCote_id()).get();
-        cote.setQuantity(0);
-        cote.setDateClose(LocalDate.now());
+
         ExportCote exportCote = new ExportCote();
         exportCote.setWeight(exportCoteRequest.getWeight());
         exportCote.setAmount(cote.getQuantity());
+        cote.setQuantity(0);
+        cote.setDateClose(LocalDate.now());
         exportCote.setPartner(exportCoteRequest.getPartner());
         exportCote.setPrice(exportCoteRequest.getPrice());
         exportCote.setCote(cote);
+
         exportCote.setAccount(iAccountRepository.findById(exportCoteRequest.getAccount_id()).get());
         return iExportCoteRepository.save(exportCote);
     }
@@ -79,7 +82,12 @@ public class ExportCoteService implements IExportCoteService {
         iExportCoteRepository.deleteById(id);
     }
 
-
+    @Override
+    public void deleteExportCotes(DeleteExportCotesRequest deleteExportCotesRequest) {
+        for(int id : deleteExportCotesRequest.getIdList()){
+            iExportCoteRepository.deleteById(id);
+        }
+    }
 
 
 }

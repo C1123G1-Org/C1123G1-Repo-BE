@@ -145,6 +145,7 @@ public class PigRestController {
     @GetMapping("/search")
     public ResponseEntity<List<Pig>> searchCodeCote(@RequestParam("code") String code) {
         Optional<List<Pig>> pigOptional = pigService.findPigsByCote_Code(code);
+        System.out.println(pigOptional.isPresent());
         if (!pigOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

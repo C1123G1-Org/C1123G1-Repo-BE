@@ -1,14 +1,18 @@
 package com.codegym.service.Impl;
 
 import com.codegym.dto.PostDTO;
+import com.codegym.model.Account;
 import com.codegym.model.Post;
 import com.codegym.repository.IPostRepository;
+import com.codegym.service.IAccountService;
 import com.codegym.service.IPostService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,10 +24,13 @@ import java.util.Optional;
 public class PostService implements IPostService {
     @Autowired
     IPostRepository postRepository;
+    @Autowired
+    private IAccountService accountService;
 
     @Override
     public ResponseEntity<List<Post>> getAllPost() {
-        List<Post> posts = postRepository.findAll();
+        List<Post> posts = postRepository.findAll(Sort.by(Sort.Direction.DESC,
+                "postDate"));
         if (posts.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -33,8 +40,12 @@ public class PostService implements IPostService {
 
     @Override
     public ResponseEntity<List<Post>> getPostWithPagination(int page) {
+        /*Pageable pageable = PageRequest.of(page,
+                5);*/
         Pageable pageable = PageRequest.of(page,
-                5);
+                5,
+                Sort.by(Sort.Direction.DESC,
+                        "postDate"));
         Page<Post> postList = postRepository.findAll(pageable);
 
         if (postList.isEmpty()) {
@@ -56,21 +67,21 @@ public class PostService implements IPostService {
 
     @Override
     public ResponseEntity<Post> save(PostDTO newPost) {
+        Account account = accountService.findById(newPost.getAccountId());
         Post post = new Post();
         BeanUtils.copyProperties(newPost,
                 post);
-
+        post.setAccount(account);
         //Get the account's id to set in to Post object
         /*{
             postDTO.getAccountId();
         }*/
-
-        Post savedPost = postRepository.save(post);
-        if (savedPost == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        try {
+            postRepository.save(post);
+        } catch (DataIntegrityViolationException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(savedPost,
-                HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Override
@@ -100,5 +111,29 @@ public class PostService implements IPostService {
         }
         return new ResponseEntity<>(savedPost,
                 HttpStatus.CREATED);
+    }
+
+    // Bình
+    @Override
+    public ResponseEntity<Page<Post>> getPostWithPageAndStatus(int page,
+                                                               String status) {
+        Pageable pageable = PageRequest.of(page,
+                5,
+                Sort
+                        .by("postDate")
+                        .descending());
+        Page<Post> list = postRepository.findPostsByStatusContaining(pageable,
+                status);
+        if (list.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(list,
+                HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Post> getFocalPointPost() {
+        return new ResponseEntity<>(postRepository.findFirstByIsFocalPointTrueOrderByPostDateDesc(),
+                HttpStatus.OK);
     }
 }
