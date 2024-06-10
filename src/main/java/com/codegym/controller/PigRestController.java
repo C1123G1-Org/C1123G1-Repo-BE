@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,6 +57,17 @@ public class PigRestController {
     }
     @GetMapping("/dateInList")
     public ResponseEntity<Map<LocalDate, Integer>> listDateIn(){
+        List<Pig> list = pigService.findAll();
+        Map<LocalDate, Integer> listMap = new TreeMap<>();
+        for (Pig p: list) {
+            addElement(listMap, p.getDateIn());
+        }
+        return new ResponseEntity<>(listMap,HttpStatus.OK);
+    }
+    @GetMapping("/dateInListByMonth")
+    public ResponseEntity<Map<LocalDate, Integer>> listDateInByMonth(@RequestParam("month") Integer month){
+        LocalDate dateStart = LocalDate.of(2024,month,01);
+        LocalDate dateEnd = LocalDate.of(2024,month,04);
         List<Pig> list = pigService.findAll();
         Map<LocalDate, Integer> listMap = new TreeMap<>();
         for (Pig p: list) {
