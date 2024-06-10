@@ -6,6 +6,7 @@ import com.codegym.model.Cote;
 import com.codegym.model.Pig;
 import com.codegym.service.ICoteService;
 import com.codegym.service.IPigService;
+import com.codegym.service.Impl.PigService;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,13 @@ public class PigRestController {
     private IPigService pigService;
     @Autowired
     private ICoteService coteService;
+    private static void addElement(Map<LocalDate, Integer> elementCount, LocalDate element) {
+        if (elementCount.containsKey(element)) {
+            elementCount.put(element, elementCount.get(element) + 1);
+        } else {
+            elementCount.put(element, 1);
+        }
+    }
 
     @GetMapping("/coteList")
     public ResponseEntity<List<Cote>> listCote(){
@@ -46,7 +54,25 @@ public class PigRestController {
         }
         return new ResponseEntity<>(coteListAvaiable,HttpStatus.OK);
     }
-
+    @GetMapping("/dateInList")
+    public ResponseEntity<Map<LocalDate, Integer>> listDateIn(){
+        List<Pig> list = pigService.findAll();
+        Map<LocalDate, Integer> listMap = new TreeMap<>();
+        for (Pig p: list) {
+            addElement(listMap, p.getDateIn());
+        }
+        return new ResponseEntity<>(listMap,HttpStatus.OK);
+    }
+    @GetMapping
+    public ResponseEntity<List<Pig>> listPig(){
+        List<Pig> list = pigService.findAll();
+        Comparator<Pig> byDate = Comparator.comparing(Pig::getDateIn);
+        Collections.sort(list, byDate);
+        if (list.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(list,HttpStatus.OK);
+    }
     @GetMapping("/{pageSize}")
     public ResponseEntity<Page<Pig>> listPigPage(@PathVariable Integer pageSize,
                                                  @RequestParam(value = "page") Integer page){
@@ -57,32 +83,6 @@ public class PigRestController {
         }
         return new ResponseEntity<>(list,HttpStatus.OK);
     }
-
-//    @GetMapping("/statusSearch")
-//    public ResponseEntity<Optional<List<Pig>>> listPigsSearchByStatus(
-//                                                            @RequestParam("status") String status){
-//        Optional<List<Pig>> list = pigService.findPigsByStatus(status);
-//        System.out.println("hello");
-//        System.out.println((status));
-//        for (Pig p: list.get()) {
-//            System.out.println(p.toString());
-//        }
-//        if (list.isEmpty()){
-//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//        }
-//        return new ResponseEntity<>(list,HttpStatus.OK);
-//    }
-//    @GetMapping("/search/weight")
-//    public ResponseEntity<List<Pig>> searchOpenTime(
-//                                                     @RequestParam("weightMin")double weightMin,
-//                                                     @RequestParam("weightMax")double weightMax){
-//        Optional<List<Pig>> list = pigService.findPigsByWeightBetween(weightMin,weightMax);
-//        if (list.isEmpty()){
-//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//        }
-//        return new ResponseEntity<>(list.get(),HttpStatus.OK);
-//    }
-
     @PostMapping
     public ResponseEntity<PigDto> createPig(@Valid @RequestBody PigDto pigDto){
         Pig addPig = new Pig();
@@ -148,9 +148,6 @@ public class PigRestController {
         if (!pigOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        for (Pig p: pigOptional.get()) {
-            System.out.println(p.toString());
-        }
         return new ResponseEntity<>(pigOptional.get(), HttpStatus.OK);
     }
 
@@ -160,9 +157,6 @@ public class PigRestController {
         Optional<List<Pig>> listOptional = pigService.findByDateInBetween(startDate, endDate);
         if (!listOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        for (Pig p: listOptional.get()) {
-            System.out.println(p.toString());
         }
         return new ResponseEntity<>(listOptional.get(), HttpStatus.OK);
     }
@@ -175,9 +169,6 @@ public class PigRestController {
         if (!listOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        for (Pig p: listOptional.get()) {
-            System.out.println(p.toString());
-        }
         return new ResponseEntity<>(listOptional.get(), HttpStatus.OK);
     }
 
@@ -187,9 +178,6 @@ public class PigRestController {
         Optional<List<Pig>> listOptional = pigService.findByDateOutBetween(startDate, endDate);
         if (!listOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        for (Pig p: listOptional.get()) {
-            System.out.println(p.toString());
         }
         return new ResponseEntity<>(listOptional.get(), HttpStatus.OK);
     }
@@ -201,9 +189,6 @@ public class PigRestController {
         Optional<List<Pig>> listOptional = pigService.findByDateOutBetweenAndCote_Code(startDate, endDate, code);
         if (!listOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        for (Pig p: listOptional.get()) {
-            System.out.println(p.toString());
         }
         return new ResponseEntity<>(listOptional.get(), HttpStatus.OK);
     }
