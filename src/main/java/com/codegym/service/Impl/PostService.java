@@ -29,7 +29,8 @@ public class PostService implements IPostService {
 
     @Override
     public ResponseEntity<List<Post>> getAllPost() {
-        List<Post> posts = postRepository.findAll();
+        List<Post> posts = postRepository.findAll(Sort.by(Sort.Direction.DESC,
+                "postDate"));
         if (posts.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -39,8 +40,12 @@ public class PostService implements IPostService {
 
     @Override
     public ResponseEntity<List<Post>> getPostWithPagination(int page) {
+        /*Pageable pageable = PageRequest.of(page,
+                5);*/
         Pageable pageable = PageRequest.of(page,
-                5);
+                5,
+                Sort.by(Sort.Direction.DESC,
+                        "postDate"));
         Page<Post> postList = postRepository.findAll(pageable);
 
         if (postList.isEmpty()) {
@@ -73,7 +78,7 @@ public class PostService implements IPostService {
         }*/
         try {
             postRepository.save(post);
-        }catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -110,12 +115,25 @@ public class PostService implements IPostService {
 
     // Bình
     @Override
-    public ResponseEntity<Page<Post>> getPostWithPageAndStatus(int page,String status) {
-        Pageable pageable = PageRequest.of(page, 5, Sort.by("postDate").descending());
-        Page<Post> list = postRepository.findPostsByStatusContaining(pageable,status);
+    public ResponseEntity<Page<Post>> getPostWithPageAndStatus(int page,
+                                                               String status) {
+        Pageable pageable = PageRequest.of(page,
+                5,
+                Sort
+                        .by("postDate")
+                        .descending());
+        Page<Post> list = postRepository.findPostsByStatusContaining(pageable,
+                status);
         if (list.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        return new ResponseEntity<>(list,
+                HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Post> getFocalPointPost() {
+        return new ResponseEntity<>(postRepository.findFirstByIsFocalPointTrueOrderByPostDateDesc(),
+                HttpStatus.OK);
     }
 }

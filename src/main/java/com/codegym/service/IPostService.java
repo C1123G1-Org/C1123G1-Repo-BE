@@ -1,10 +1,8 @@
 package com.codegym.service;
 
 import com.codegym.dto.PostDTO;
-import com.codegym.model.Cote;
 import com.codegym.model.Post;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -23,5 +21,8 @@ public interface IPostService {
     ResponseEntity<Post> update(int id,
                                 PostDTO updatePost);
 
-    ResponseEntity<Page<Post>> getPostWithPageAndStatus (int page, String status);
+    ResponseEntity<Page<Post>> getPostWithPageAndStatus(int page,
+                                                        String status);
+
+    ResponseEntity<Post> getFocalPointPost();
 }
