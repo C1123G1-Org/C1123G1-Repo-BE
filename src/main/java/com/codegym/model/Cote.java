@@ -1,5 +1,6 @@
 package com.codegym.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,6 +24,7 @@ public class Cote {
 
     @ManyToOne
     @JoinColumn(name = "account_id", referencedColumnName = "id")
+    @JsonIgnoreProperties({"password", "email", "gender", "identityCode", "status"})
     private Account account;
 
 

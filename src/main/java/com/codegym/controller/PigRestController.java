@@ -145,12 +145,11 @@ public class PigRestController {
     @GetMapping("/search")
     public ResponseEntity<List<Pig>> searchCodeCote(@RequestParam("code") String code) {
         Optional<List<Pig>> pigOptional = pigService.findPigsByCote_Code(code);
+        System.out.println(pigOptional.isPresent());
         if (!pigOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        for (Pig p: pigOptional.get()) {
-            System.out.println(p.toString());
-        }
+
         return new ResponseEntity<>(pigOptional.get(), HttpStatus.OK);
     }
 
@@ -160,9 +159,6 @@ public class PigRestController {
         Optional<List<Pig>> listOptional = pigService.findByDateInBetween(startDate, endDate);
         if (!listOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        for (Pig p: listOptional.get()) {
-            System.out.println(p.toString());
         }
         return new ResponseEntity<>(listOptional.get(), HttpStatus.OK);
     }
@@ -175,9 +171,6 @@ public class PigRestController {
         if (!listOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        for (Pig p: listOptional.get()) {
-            System.out.println(p.toString());
-        }
         return new ResponseEntity<>(listOptional.get(), HttpStatus.OK);
     }
 
@@ -187,9 +180,6 @@ public class PigRestController {
         Optional<List<Pig>> listOptional = pigService.findByDateOutBetween(startDate, endDate);
         if (!listOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        for (Pig p: listOptional.get()) {
-            System.out.println(p.toString());
         }
         return new ResponseEntity<>(listOptional.get(), HttpStatus.OK);
     }
@@ -201,9 +191,6 @@ public class PigRestController {
         Optional<List<Pig>> listOptional = pigService.findByDateOutBetweenAndCote_Code(startDate, endDate, code);
         if (!listOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        for (Pig p: listOptional.get()) {
-            System.out.println(p.toString());
         }
         return new ResponseEntity<>(listOptional.get(), HttpStatus.OK);
     }

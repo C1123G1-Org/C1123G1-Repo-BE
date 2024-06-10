@@ -2,8 +2,11 @@ package com.codegym.controller;
 
 import com.codegym.dto.ChangeCoteRequest;
 import com.codegym.dto.CoteDto;
+import com.codegym.model.Account;
 import com.codegym.model.Cote;
 import com.codegym.model.Pig;
+import com.codegym.repository.IAccountRepository;
+import com.codegym.service.IAccountService;
 import com.codegym.service.ICoteService;
 import com.codegym.service.IPigService;
 import jakarta.validation.Valid;
@@ -33,6 +36,12 @@ public class CoteRestController {
 
     @Autowired
     private IPigService pigService;
+
+    @Autowired
+    private IAccountRepository accountRepository;
+
+    @Autowired
+    private IAccountService accountService;
 
     @GetMapping("/getCodes")
     public ResponseEntity<List<Cote>> listCotes() {
@@ -131,8 +140,10 @@ public class CoteRestController {
 
     @PostMapping
     public ResponseEntity<Cote> createCote(@Valid @RequestBody CoteDto coteDto) {
+        Account account = accountService.findById(coteDto.getAccount_id());
         Cote cote = new Cote();
         BeanUtils.copyProperties(coteDto, cote);
+        cote.setAccount(account);
         try {
             coteService.save(cote);
         } catch (DataIntegrityViolationException e) {
@@ -188,9 +199,10 @@ public class CoteRestController {
     @PutMapping("/{id}")
     public ResponseEntity<Cote> updateCote(@Valid @RequestBody CoteDto coteDto,
                                            @PathVariable Integer id) {
+        Account account = accountService.findById(coteDto.getAccount_id());
         Cote cote = new Cote();
-        BeanUtils.copyProperties(coteDto,
-                cote);
+        BeanUtils.copyProperties(coteDto, cote);
+        cote.setAccount(account);
         try {
             coteService.update(cote);
         } catch (DataIntegrityViolationException e) {
@@ -207,5 +219,12 @@ public class CoteRestController {
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/findUser/{username}")
+    public ResponseEntity<Account> findCote(@PathVariable String username) {
+        Account account = accountRepository.findByUsername(username);
+        if (account == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(account, HttpStatus.OK);
     }
 }
