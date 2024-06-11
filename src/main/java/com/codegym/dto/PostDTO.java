@@ -19,4 +19,5 @@ public class PostDTO {
     private String status;
     private LocalDateTime postDate;
     private Integer accountId;
+    private boolean isFocalPoint;
 }

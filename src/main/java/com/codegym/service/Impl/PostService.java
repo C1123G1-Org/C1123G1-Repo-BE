@@ -76,6 +76,13 @@ public class PostService implements IPostService {
         /*{
             postDTO.getAccountId();
         }*/
+        if (post.isFocalPoint()) {
+            Post post2 = postRepository.findFirstByIsFocalPointTrueOrderByPostDateDesc();
+            if (post2 != null) {
+                post2.setFocalPoint(false);
+                postRepository.save(post2);
+            }
+        }
         try {
             postRepository.save(post);
         } catch (DataIntegrityViolationException e) {
@@ -98,13 +105,23 @@ public class PostService implements IPostService {
     @Override
     public ResponseEntity<Post> update(int id,
                                        PostDTO updatePost) {
+        System.out.println(updatePost);
         Post currentPost = postRepository
                 .findById(id)
                 .get();
 
         BeanUtils.copyProperties(updatePost,
                 currentPost);
+        if (currentPost.isFocalPoint()) {
+            Post post = postRepository.findFirstByIsFocalPointTrueOrderByPostDateDesc();
+            if (post != null) {
+                if (post.getId() != currentPost.getId()){
+                    post.setFocalPoint(false);
+                    postRepository.save(post);
+                }
 
+            }
+        }
         Post savedPost = postRepository.save(currentPost);
         if (savedPost == null) {
             return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
