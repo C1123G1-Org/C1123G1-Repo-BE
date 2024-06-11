@@ -72,4 +72,9 @@ public class AccountService implements IAccountService {
         return iCoteRepository.findCoteManagementEmployee(username);
     }
 
+    @Override
+    public void findByDetail(Account account) {
+        iAccountRepository.findById(account.getId());
+    }
+
 }
