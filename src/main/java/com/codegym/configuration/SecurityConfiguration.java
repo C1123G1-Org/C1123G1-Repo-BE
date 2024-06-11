@@ -95,6 +95,8 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/exportcotes/**")
                         .authenticated()
                         .requestMatchers("/staff/**")
+                        .authenticated()
+                        .requestMatchers("/api/account-information/**")
                         .authenticated());
         return http.build();
     }
