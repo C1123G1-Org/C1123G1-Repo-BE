@@ -15,6 +15,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -28,6 +30,9 @@ public class StaffRestController {
 
     @Autowired
     private IAccountService iAccountService;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
 
     @GetMapping("")
@@ -59,7 +64,10 @@ public class StaffRestController {
         }
 
         if (result == "") {
+            String enc = passwordEncoder.encode(account.getPassword());
+            account.setPassword(enc);
             iAccountService.save(account);
+
             return new ResponseEntity<>(HttpStatus.CREATED);
         }
 
@@ -75,7 +83,6 @@ public class StaffRestController {
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateStaff(@PathVariable Integer id, @RequestBody Account account) {
         List<Account> accountList = iAccountService.findAll();
-
         for (int i = 0; i < accountList.size(); i++) {
             if (accountList.get(i).getId().equals(id)){
                 accountList.remove(i);
@@ -97,6 +104,9 @@ public class StaffRestController {
         }
 
         if (result == "") {
+            String enc = passwordEncoder.encode(account.getPassword());
+            account.setPassword(enc);
+            iAccountService.save(account);
             iAccountService.save(account);
             return new ResponseEntity<>(HttpStatus.CREATED);
         }
@@ -115,6 +125,15 @@ public class StaffRestController {
         List<Cote> coteList = iAccountService.findCoteManagement("trucvi");
         return new ResponseEntity<>(coteList,HttpStatus.OK);
     }
+
+
+    @GetMapping("/detail/{id}")
+    public ResponseEntity<?> findDetail(@PathVariable Integer id){
+        Account account = iAccountService.findById(id);
+        iAccountService.findByDetail(account);
+        return new ResponseEntity<>(account,HttpStatus.OK);
+    }
+
 
 
 
