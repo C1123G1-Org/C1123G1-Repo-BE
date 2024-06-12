@@ -61,31 +61,10 @@ public class PostRestController {
     public ResponseEntity<Post> getFocalPointPost() {
         return postService.getFocalPointPost();
     }
-}
 
-//    @PatchMapping("/{id}")
-//    public ResponseEntity<Post> updatePost(@PathVariable int id,
-//                                           @RequestBody Map<String, Object> postUpdateProps) {
-//        Optional<Post> postOptional = postService.getPostById(id);
-//        if (!postOptional.isPresent()) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//        for (Map.Entry<String, Object> prop : postUpdateProps.entrySet()) {
-//            try {
-//                Field nameField = postOptional
-//                        .get()
-//                        .getClass()
-//                        .getDeclaredField(prop.getKey());
-//                nameField.setAccessible(true);
-//                nameField.set(postOptional.get(),
-//                        prop.getValue());
-//            } catch (Exception e) {
-//                //Logging if the field is not exist in the object
-//                System.err.println("The field " + prop + "is not exist!");
-//            }
-//        }
-//        postService.save(postOptional.get());
-//        return new ResponseEntity<>(postOptional.get(),
-//                HttpStatus.OK);
-//    }
-//}
+    @GetMapping("/search")
+    public ResponseEntity<List<Post>> getSearchPosts(@RequestParam String word) {
+        System.out.println(word);
+        return postService.getSearchPosts(word);
+    }
+}

@@ -19,4 +19,6 @@ public interface IPostRepository extends JpaRepository<Post, Integer> {
 
     Page<Post> findPostsByStatus(String status,
                                  Pageable pageable);
+
+    List<Post> findFirst5PostsByTitleContainingOrderByPostDateDesc(String word);
 }

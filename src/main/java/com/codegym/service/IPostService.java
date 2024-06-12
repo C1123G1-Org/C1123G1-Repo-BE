@@ -25,4 +25,6 @@ public interface IPostService {
                                                         String status);
 
     ResponseEntity<Post> getFocalPointPost();
+
+    ResponseEntity<List<Post>> getSearchPosts(String word);
 }
