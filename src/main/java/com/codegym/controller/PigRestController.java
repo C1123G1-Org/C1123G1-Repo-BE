@@ -87,22 +87,43 @@ public class PigRestController {
         return new ResponseEntity<>(listMap,HttpStatus.OK);
     }
     @GetMapping("/dateInListByYear")
-    public ResponseEntity<Map<Integer, Integer>> listDateInByYear(@RequestParam("year") Integer year){
+    public ResponseEntity<Map<String, Integer>> listDateInByYear(@RequestParam("year") Integer year){
         LocalDate dateStart;
         LocalDate dateEnd;
-        Map<Integer, Integer> listMap = new TreeMap<>();
+        Map<String, Integer> listMap = new TreeMap<>();
         for (int i = 1; i <= 12; i++) {
             if (i != 12) {
                 dateStart = LocalDate.of(year,i,01);
                 dateEnd = LocalDate.of(year,i+1,01);
                 Optional<List<Pig>> listOptional = pigService.findByDateInBetween(dateStart, dateEnd);
-                listMap.put(i, listOptional.get().size());
+                for (int j = 0; j < listOptional.get().size(); j++) {
+                    if (listOptional.get().get(j).equals(dateEnd))
+                        listOptional.get().remove(j);
+                }
+                if (i<10) {
+                    listMap.put("0" + i + "/" + year, listOptional.get().size());
+                } else {
+                    listMap.put(i + "/" + year, listOptional.get().size());
+                }
             } else {
                 dateStart = LocalDate.of(year,i,01);
-                dateEnd = LocalDate.of(year+1,1,01);
+                dateEnd = LocalDate.of(year,i,31);
                 Optional<List<Pig>> listOptional = pigService.findByDateInBetween(dateStart, dateEnd);
-                listMap.put(i, listOptional.get().size());
+                listMap.put(i + "/" + year, listOptional.get().size());
             }
+        }
+        return new ResponseEntity<>(listMap,HttpStatus.OK);
+    }
+    @GetMapping("/dateInListByWeek")
+    public ResponseEntity<Map<LocalDate, Integer>> listDateInByWeek(){
+        LocalDate dateStart = LocalDate.now().minusDays(7);
+        LocalDate dateEnd = LocalDate.now();
+        System.out.println(dateStart);
+        System.out.println(dateEnd);
+        Map<LocalDate, Integer> listMap = new TreeMap<>();
+        Optional<List<Pig>> listOptional = pigService.findByDateInBetween(dateStart, dateEnd);
+        for (Pig p: listOptional.get()) {
+            addElement(listMap, p.getDateIn());
         }
         return new ResponseEntity<>(listMap,HttpStatus.OK);
     }
