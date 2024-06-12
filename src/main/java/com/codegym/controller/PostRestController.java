@@ -19,7 +19,7 @@ public class PostRestController {
 
     @GetMapping("/all")
     public ResponseEntity<List<Post>> getAllPost() {
-        return postService.getAllPost();
+        return postService.getAllPost("Hiển thị");
     }
 
     @GetMapping("/list-post/{page}")

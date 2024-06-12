@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface IPostService {
-    ResponseEntity<List<Post>> getAllPost();
+    ResponseEntity<List<Post>> getAllPost(String status);
 
     ResponseEntity<List<Post>> getPostWithPagination(int page);
 
