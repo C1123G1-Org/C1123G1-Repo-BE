@@ -138,4 +138,10 @@ public class PostService implements IPostService {
         return new ResponseEntity<>(postRepository.findFirstByIsFocalPointTrueOrderByPostDateDesc(),
                 HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<List<Post>> getSearchPosts(String word) {
+        return new ResponseEntity<>(postRepository.findFirst5PostsByTitleContainingOrderByPostDateDesc(word),
+                HttpStatus.OK);
+    }
 }

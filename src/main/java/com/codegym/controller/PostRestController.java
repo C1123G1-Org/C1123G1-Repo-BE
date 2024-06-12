@@ -61,5 +61,10 @@ public class PostRestController {
     public ResponseEntity<Post> getFocalPointPost() {
         return postService.getFocalPointPost();
     }
-}
 
+    @GetMapping("/search")
+    public ResponseEntity<List<Post>> getSearchPosts(@RequestParam String word) {
+        System.out.println(word);
+        return postService.getSearchPosts(word);
+    }
+}
