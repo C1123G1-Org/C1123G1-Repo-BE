@@ -28,9 +28,10 @@ public class PostService implements IPostService {
     private IAccountService accountService;
 
     @Override
-    public ResponseEntity<List<Post>> getAllPost() {
-        List<Post> posts = postRepository.findAll(Sort.by(Sort.Direction.DESC,
-                "postDate"));
+    public ResponseEntity<List<Post>> getAllPost(String status) {
+        List<Post> posts = postRepository.findPostsByStatus(status,
+                Sort.by(Sort.Direction.DESC,
+                        "postDate"));
         if (posts.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -46,7 +47,8 @@ public class PostService implements IPostService {
                 5,
                 Sort.by(Sort.Direction.DESC,
                         "postDate"));
-        Page<Post> postList = postRepository.findAll(pageable);
+        Page<Post> postList = postRepository.findPostsByStatus("Hiển thị",
+                pageable);
 
         if (postList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
