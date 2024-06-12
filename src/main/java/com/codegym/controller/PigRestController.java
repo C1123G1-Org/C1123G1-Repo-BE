@@ -118,8 +118,6 @@ public class PigRestController {
     public ResponseEntity<Map<LocalDate, Integer>> listDateInByWeek(){
         LocalDate dateStart = LocalDate.now().minusDays(7);
         LocalDate dateEnd = LocalDate.now();
-        System.out.println(dateStart);
-        System.out.println(dateEnd);
         Map<LocalDate, Integer> listMap = new TreeMap<>();
         Optional<List<Pig>> listOptional = pigService.findByDateInBetween(dateStart, dateEnd);
         for (Pig p: listOptional.get()) {
@@ -209,7 +207,6 @@ public class PigRestController {
     @GetMapping("/search")
     public ResponseEntity<List<Pig>> searchCodeCote(@RequestParam("code") String code) {
         Optional<List<Pig>> pigOptional = pigService.findPigsByCote_Code(code);
-        System.out.println(pigOptional.isPresent());
         if (!pigOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
