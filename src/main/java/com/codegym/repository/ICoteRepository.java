@@ -19,9 +19,9 @@ public interface ICoteRepository extends JpaRepository<Cote,Integer> {
     Optional<List<Cote>> findByDateOpenBetweenAndAccount_Code ( LocalDate startDate, LocalDate endDate, String code);
     List<Cote> findCotesByDateCloseIsNull();
 
-    @Query(value = "select cote.* from cote " +
-            "left join account on cote.account_id = account.id " +
-            "where account.username like :username and cote.date_close is null", nativeQuery = true)
-    List<Cote> findCoteManagementEmployee(@Param("username") String username);
+//    @Query(value = "select cote.* from cote " +
+//            "left join account on cote.account_id = account.id " +
+//            "where account.", nativeQuery = true)
+//    List<Cote> findCoteManagementEmployee(@Param("username") String username);
 
 }

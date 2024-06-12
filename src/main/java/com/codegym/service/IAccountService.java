@@ -24,8 +24,9 @@ public interface IAccountService {
 
     AccountDto getCurrentAccount();
 
-    List<Cote> findCoteManagement(String username);
+//    List<Cote> findCoteManagement(Integer id);
 
     void findByDetail(Account account);
 
+    List<Cote> findAllCote();
 }
