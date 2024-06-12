@@ -41,8 +41,8 @@ public class PigRestController {
         }
     }
 
-    @GetMapping("/coteList")
-    public ResponseEntity<List<Cote>> listCote(){
+    @GetMapping("/coteListAvaiable")
+    public ResponseEntity<List<Cote>> listCoteAvaiable(){
         List<Cote> coteList = coteService.findAll();
         List<Cote> coteListAvaiable = new ArrayList<>();
         for (Cote c: coteList) {
@@ -54,6 +54,14 @@ public class PigRestController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(coteListAvaiable,HttpStatus.OK);
+    }
+    @GetMapping("/coteListAll")
+    public ResponseEntity<List<Cote>> listCoteAll(){
+        List<Cote> coteListAll = coteService.findAll();
+        if (coteListAll.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(coteListAll,HttpStatus.OK);
     }
     @GetMapping("/dateInList")
     public ResponseEntity<Map<LocalDate, Integer>> listDateIn(){
