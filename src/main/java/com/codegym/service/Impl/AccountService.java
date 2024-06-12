@@ -67,10 +67,7 @@ public class AccountService implements IAccountService {
                 accountDto);
         return accountDto;
     }
-//    @Override
-//    public List<Cote> findCoteManagement(Integer id) {
-//        return iCoteRepository.findCoteManagementEmployee(id);
-//    }
+
 
     @Override
     public void findByDetail(Account account) {
