@@ -97,6 +97,8 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/contact-info")
                         .authenticated()
                         .requestMatchers("/staff/**")
+                        .authenticated()
+                        .requestMatchers("/api/account-information/**")
                         .authenticated());
         return http.build();
     }

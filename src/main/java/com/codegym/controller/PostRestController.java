@@ -19,7 +19,7 @@ public class PostRestController {
 
     @GetMapping("/all")
     public ResponseEntity<List<Post>> getAllPost() {
-        return postService.getAllPost();
+        return postService.getAllPost("Hiển thị");
     }
 
     @GetMapping("/list-post/{page}")
@@ -53,7 +53,13 @@ public class PostRestController {
     @GetMapping("/mgt/{page}")
     public ResponseEntity<Page<Post>> getPostWithPageAndStatus(@PathVariable int page,
                                                                @RequestParam(value = "status") String status) {
-        return postService.getPostWithPageAndStatus(page,status);
+        return postService.getPostWithPageAndStatus(page,
+                status);
+    }
+
+    @GetMapping("/focal-point")
+    public ResponseEntity<Post> getFocalPointPost() {
+        return postService.getFocalPointPost();
     }
 }
 
