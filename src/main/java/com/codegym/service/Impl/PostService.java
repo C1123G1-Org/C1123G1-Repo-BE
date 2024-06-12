@@ -28,7 +28,7 @@ public class PostService implements IPostService {
     private IAccountService accountService;
 
     @Override
-    public ResponseEntity<List<Post>> getAllPost() {
+    public ResponseEntity<List<Post>> getAllPost(String status) {
         List<Post> posts = postRepository.findAll(Sort.by(Sort.Direction.DESC,
                 "postDate"));
         if (posts.isEmpty()) {
