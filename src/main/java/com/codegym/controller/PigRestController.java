@@ -6,6 +6,7 @@ import com.codegym.model.Cote;
 import com.codegym.model.Pig;
 import com.codegym.service.ICoteService;
 import com.codegym.service.IPigService;
+import com.codegym.service.Impl.PigService;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,9 +33,16 @@ public class PigRestController {
     private IPigService pigService;
     @Autowired
     private ICoteService coteService;
+    private static void addElement(Map<LocalDate, Integer> elementCount, LocalDate element) {
+        if (elementCount.containsKey(element)) {
+            elementCount.put(element, elementCount.get(element) + 1);
+        } else {
+            elementCount.put(element, 1);
+        }
+    }
 
-    @GetMapping("/coteList")
-    public ResponseEntity<List<Cote>> listCote(){
+    @GetMapping("/coteListAvaiable")
+    public ResponseEntity<List<Cote>> listCoteAvaiable(){
         List<Cote> coteList = coteService.findAll();
         List<Cote> coteListAvaiable = new ArrayList<>();
         for (Cote c: coteList) {
@@ -46,7 +55,94 @@ public class PigRestController {
         }
         return new ResponseEntity<>(coteListAvaiable,HttpStatus.OK);
     }
-
+    @GetMapping("/coteListAll")
+    public ResponseEntity<List<Cote>> listCoteAll(){
+        List<Cote> coteListAll = coteService.findAll();
+        if (coteListAll.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(coteListAll,HttpStatus.OK);
+    }
+    @GetMapping("/dateInList")
+    public ResponseEntity<Map<LocalDate, Integer>> listDateIn(){
+        List<Pig> list = pigService.findAll();
+        Map<LocalDate, Integer> listMap = new TreeMap<>();
+        for (Pig p: list) {
+            addElement(listMap, p.getDateIn());
+        }
+        return new ResponseEntity<>(listMap,HttpStatus.OK);
+    }
+    @GetMapping("/dateInListByMonth")
+    public ResponseEntity<Map<LocalDate, Integer>> listDateInByMonth(
+//            @RequestParam("week") Integer week,
+                                                                     @RequestParam("month") Integer month,
+                                                                     @RequestParam("year") Integer year){
+        LocalDate dateStart;
+        LocalDate dateEnd;
+        if (month == 12) {
+             dateStart = LocalDate.of(year,month,01);
+             dateEnd = LocalDate.of(year+1,1,01);
+        } else {
+             dateStart = LocalDate.of(year,month,01);
+             dateEnd = LocalDate.of(year,month+1,01);
+        }
+        Optional<List<Pig>> list = pigService.findByDateInBetween(dateStart, dateEnd);
+        Map<LocalDate, Integer> listMap = new TreeMap<>();
+        for (Pig p: list.get()) {
+            if (!p.getDateIn().equals(dateEnd))
+            addElement(listMap, p.getDateIn());
+        }
+        return new ResponseEntity<>(listMap,HttpStatus.OK);
+    }
+    @GetMapping("/dateInListByYear")
+    public ResponseEntity<Map<String, Integer>> listDateInByYear(@RequestParam("year") Integer year){
+        LocalDate dateStart;
+        LocalDate dateEnd;
+        Map<String, Integer> listMap = new TreeMap<>();
+        for (int i = 1; i <= 12; i++) {
+            if (i != 12) {
+                dateStart = LocalDate.of(year,i,01);
+                dateEnd = LocalDate.of(year,i+1,01);
+                Optional<List<Pig>> listOptional = pigService.findByDateInBetween(dateStart, dateEnd);
+                for (int j = 0; j < listOptional.get().size(); j++) {
+                    if (listOptional.get().get(j).equals(dateEnd))
+                        listOptional.get().remove(j);
+                }
+                if (i<10) {
+                    listMap.put("0" + i + "/" + year, listOptional.get().size());
+                } else {
+                    listMap.put(i + "/" + year, listOptional.get().size());
+                }
+            } else {
+                dateStart = LocalDate.of(year,i,01);
+                dateEnd = LocalDate.of(year,i,31);
+                Optional<List<Pig>> listOptional = pigService.findByDateInBetween(dateStart, dateEnd);
+                listMap.put(i + "/" + year, listOptional.get().size());
+            }
+        }
+        return new ResponseEntity<>(listMap,HttpStatus.OK);
+    }
+    @GetMapping("/dateInListByWeek")
+    public ResponseEntity<Map<LocalDate, Integer>> listDateInByWeek(){
+        LocalDate dateStart = LocalDate.now().minusDays(7);
+        LocalDate dateEnd = LocalDate.now();
+        Map<LocalDate, Integer> listMap = new TreeMap<>();
+        Optional<List<Pig>> listOptional = pigService.findByDateInBetween(dateStart, dateEnd);
+        for (Pig p: listOptional.get()) {
+            addElement(listMap, p.getDateIn());
+        }
+        return new ResponseEntity<>(listMap,HttpStatus.OK);
+    }
+    @GetMapping
+    public ResponseEntity<List<Pig>> listPig(){
+        List<Pig> list = pigService.findAll();
+        Comparator<Pig> byDate = Comparator.comparing(Pig::getDateIn);
+        Collections.sort(list, byDate);
+        if (list.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(list,HttpStatus.OK);
+    }
     @GetMapping("/{pageSize}")
     public ResponseEntity<Page<Pig>> listPigPage(@PathVariable Integer pageSize,
                                                  @RequestParam(value = "page") Integer page){
@@ -57,32 +153,6 @@ public class PigRestController {
         }
         return new ResponseEntity<>(list,HttpStatus.OK);
     }
-
-//    @GetMapping("/statusSearch")
-//    public ResponseEntity<Optional<List<Pig>>> listPigsSearchByStatus(
-//                                                            @RequestParam("status") String status){
-//        Optional<List<Pig>> list = pigService.findPigsByStatus(status);
-//        System.out.println("hello");
-//        System.out.println((status));
-//        for (Pig p: list.get()) {
-//            System.out.println(p.toString());
-//        }
-//        if (list.isEmpty()){
-//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//        }
-//        return new ResponseEntity<>(list,HttpStatus.OK);
-//    }
-//    @GetMapping("/search/weight")
-//    public ResponseEntity<List<Pig>> searchOpenTime(
-//                                                     @RequestParam("weightMin")double weightMin,
-//                                                     @RequestParam("weightMax")double weightMax){
-//        Optional<List<Pig>> list = pigService.findPigsByWeightBetween(weightMin,weightMax);
-//        if (list.isEmpty()){
-//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//        }
-//        return new ResponseEntity<>(list.get(),HttpStatus.OK);
-//    }
-
     @PostMapping
     public ResponseEntity<PigDto> createPig(@Valid @RequestBody PigDto pigDto){
         Pig addPig = new Pig();
@@ -145,11 +215,9 @@ public class PigRestController {
     @GetMapping("/search")
     public ResponseEntity<List<Pig>> searchCodeCote(@RequestParam("code") String code) {
         Optional<List<Pig>> pigOptional = pigService.findPigsByCote_Code(code);
-        System.out.println(pigOptional.isPresent());
         if (!pigOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-
         return new ResponseEntity<>(pigOptional.get(), HttpStatus.OK);
     }
 

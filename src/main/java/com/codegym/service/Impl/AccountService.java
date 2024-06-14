@@ -1,9 +1,10 @@
 package com.codegym.service.Impl;
 
 import com.codegym.dto.AccountDto;
-import com.codegym.dto.StaffDto;
 import com.codegym.model.Account;
+import com.codegym.model.Cote;
 import com.codegym.repository.IAccountRepository;
+import com.codegym.repository.ICoteRepository;
 import com.codegym.service.IAccountService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ import java.util.List;
 public class AccountService implements IAccountService {
     @Autowired
     private IAccountRepository iAccountRepository;
+
+    @Autowired
+    private ICoteRepository iCoteRepository;
 
     @Override
     public List<Account> findAll() {
@@ -62,6 +66,17 @@ public class AccountService implements IAccountService {
         BeanUtils.copyProperties(iAccountRepository.findByUsername(currentUser.getUsername()),
                 accountDto);
         return accountDto;
+    }
+
+
+    @Override
+    public void findByDetail(Account account) {
+        iAccountRepository.findById(account.getId());
+    }
+
+    @Override
+    public List<Cote> findAllCote() {
+        return iCoteRepository.findAll();
     }
 
 }
