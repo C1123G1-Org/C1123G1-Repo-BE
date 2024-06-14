@@ -95,7 +95,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/exportcotes/**")
                         .authenticated()
                         .requestMatchers("/api/contact-info")
-                        .authenticated()
+                        .permitAll()
                         .requestMatchers("/staff/**")
                         .authenticated()
                         .requestMatchers("/api/account-information/**")
